@@ -5,7 +5,7 @@ using UnityEngine;
 public class CTFManager : MonoBehaviour
 {
     public static CTFManager Instance {get; private set;}
-
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -29,5 +29,11 @@ public class CTFManager : MonoBehaviour
         {
             Instance = this;
         }
+    }
+
+    public float GetTimeLeft()
+    {
+        return GameTimer.Instance.GetTimeLeft();
+
     }
 }

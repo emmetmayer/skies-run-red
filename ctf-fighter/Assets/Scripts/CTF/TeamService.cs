@@ -9,6 +9,7 @@ public class TeamService : MonoBehaviour
     int CreateTeam()
     {
 
+        return 0;
     }
 
     bool ArePlayersOnSameTeam(/*Player A, Player B*/)
