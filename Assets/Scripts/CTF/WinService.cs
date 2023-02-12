@@ -8,7 +8,7 @@ public class WinService : MonoBehaviour
 
     bool HasTeamWonGame()
     {
-        if (CTFManager.Instance.GetTimeLeft() <= 0)
+        if (GameTimer.Instance.GetTimeLeft() <= 0)
         {
             return true;
         }

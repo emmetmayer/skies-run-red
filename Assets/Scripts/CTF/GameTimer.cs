@@ -8,9 +8,9 @@ public class GameTimer : MonoBehaviour
     
     float time_left = 0;
 
-    float GetTimeLeft()
+    public float GetTimeLeft()
     {
-
+        return time_left;
     }
 
     void SetTimeLeft(int seconds)
