@@ -84,21 +84,75 @@ namespace PlayerControls
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Dash"",
+                    ""name"": ""ForwardDash"",
                     ""type"": ""Button"",
-                    ""id"": ""a92a20bd-c5a1-40f1-bd88-d3915cd1ecc8"",
+                    ""id"": ""e7322a5d-ff5c-47aa-ab20-6267e33a861a"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Dodge"",
+                    ""name"": ""BackwardDash"",
+                    ""type"": ""Button"",
+                    ""id"": ""2327188d-6f31-4ba7-b3f0-c79c271ec08a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LeftDash"",
+                    ""type"": ""Button"",
+                    ""id"": ""217d095f-e70d-45b6-91d5-c8f7ecd9d8c3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RightDash"",
+                    ""type"": ""Button"",
+                    ""id"": ""82123e56-d08d-4c8d-aff9-b4c7947055d2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ForwardDodge"",
                     ""type"": ""Button"",
                     ""id"": ""c07f1c39-9507-4264-a92f-eba63e9040c6"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""MultiTap"",
+                    ""interactions"": ""MultiTap(tapCount=1)"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BackwardDodge"",
+                    ""type"": ""Button"",
+                    ""id"": ""ccf63402-d0f2-4f29-92de-0bdda2eff91e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""MultiTap(tapCount=1)"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LeftDodge"",
+                    ""type"": ""Button"",
+                    ""id"": ""753e84b7-fd46-4ad0-bc99-9d6c9cc70884"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""MultiTap(tapCount=1)"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RightDodge"",
+                    ""type"": ""Button"",
+                    ""id"": ""16a881d0-4fd6-4291-92ed-06a1fef46adb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""MultiTap(tapCount=1)"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -185,7 +239,7 @@ namespace PlayerControls
                     ""path"": ""<Touchscreen>/primaryTouch/tap"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Touch"",
+                    ""groups"": """",
                     ""action"": ""Fire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -236,28 +290,6 @@ namespace PlayerControls
                 },
                 {
                     ""name"": """",
-                    ""id"": ""ab1e989e-86e7-4965-9eee-c6342abd0819"",
-                    ""path"": ""<Keyboard>/shift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse;Gamepad"",
-                    ""action"": ""Dash"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""fef0d623-a93c-48f6-baf4-873660b13c0d"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Dash"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""c1f7a91b-d0fd-4a62-997e-7fb9b69bf235"",
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
@@ -270,10 +302,10 @@ namespace PlayerControls
                 {
                     ""name"": """",
                     ""id"": ""8c8e490b-c610-4785-884f-f04217b23ca4"",
-                    ""path"": ""<Pointer>/position"",
+                    ""path"": ""<Pointer>/delta"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse;Touch"",
+                    ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -285,6 +317,17 @@ namespace PlayerControls
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Joystick"",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b36879f7-c4fe-4c69-bc8c-b0142d18ce4f"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -599,94 +642,6 @@ namespace PlayerControls
                 },
                 {
                     ""name"": """",
-                    ""id"": ""e44d9184-ce62-4d3e-8c8d-c8f299a436c1"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": ""MultiTap"",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse;Gamepad"",
-                    ""action"": ""Dodge"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""1954a9a4-dd1c-479d-b9c0-822923f1d8a4"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": ""MultiTap"",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse;Gamepad"",
-                    ""action"": ""Dodge"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""6f9251c8-9278-4e05-8a5c-302c326bc9d3"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": ""MultiTap"",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse;Gamepad"",
-                    ""action"": ""Dodge"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""8f5e5257-f183-4479-b706-b3924deba91e"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": ""MultiTap"",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse;Gamepad"",
-                    ""action"": ""Dodge"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""597060fc-c2aa-45ef-9bce-f43ef5d27754"",
-                    ""path"": ""<Gamepad>/rightStick/up"",
-                    ""interactions"": ""MultiTap"",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Dodge"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""c74707b6-4583-476f-974c-7d018abd6d59"",
-                    ""path"": ""<Gamepad>/rightStick/down"",
-                    ""interactions"": ""MultiTap"",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Dodge"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""b47e1b8f-2cff-4fab-a37f-c4d552debbb3"",
-                    ""path"": ""<Gamepad>/rightStick/left"",
-                    ""interactions"": ""MultiTap"",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Dodge"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""5944f0b2-44f0-40f4-8d99-1180fa95c7ec"",
-                    ""path"": ""<Gamepad>/rightStick/right"",
-                    ""interactions"": ""MultiTap"",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Dodge"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""ed2c8b7d-0ae3-4882-b9cd-033dcbfb2c51"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
@@ -838,6 +793,182 @@ namespace PlayerControls
                     ""action"": ""StopMove"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""828dbdf0-ca3f-4d14-a11e-ebc3ef82ae2e"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""ForwardDodge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""751151c7-01dd-45ce-bec5-f728c40dd4f1"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BackwardDodge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9cd234f5-f936-4c50-80a3-b76af39fc8dc"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftDodge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2e64b6ee-b28f-46f0-b3d3-f8a30a72f4ef"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RightDodge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""ec7fc0c8-5a5a-46ee-9d77-a8829e375a6f"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ForwardDash"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""7b1edf1e-4142-4c95-abec-ac6497ef77ca"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""ForwardDash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""6babed74-3b04-4023-9053-b106ee082ff1"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ForwardDash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""c09b28d1-5eb2-4268-b7e5-912221888b75"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftDash"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""07f6630f-61fd-414f-a184-83fee9324a96"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftDash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""6b885871-80c0-4220-8c38-cf09b03591f8"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftDash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""b72495dd-8924-4671-9cad-967c8585b0a3"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RightDash"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""d017193a-80d9-4719-b091-022ec5b9a40d"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RightDash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""9a372aa5-9cca-4403-9dfd-e7c96d9b3026"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RightDash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""ed0a11a1-0a36-4aa2-9d17-849cc52e9b0c"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BackwardDash"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""89c483da-0abb-416a-8386-2b9c5dd27476"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""BackwardDash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""5d8e0810-f599-485b-8a44-761f4fbff2ea"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BackwardDash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -1207,7 +1338,7 @@ namespace PlayerControls
                     ""path"": ""*/{Submit}"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse;Gamepad;Touch;Joystick;XR"",
+                    ""groups"": ""Keyboard&Mouse;Gamepad;Joystick;XR"",
                     ""action"": ""Submit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1218,7 +1349,7 @@ namespace PlayerControls
                     ""path"": ""*/{Cancel}"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse;Gamepad;Touch;Joystick;XR"",
+                    ""groups"": ""Keyboard&Mouse;Gamepad;Joystick;XR"",
                     ""action"": ""Cancel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1247,17 +1378,6 @@ namespace PlayerControls
                 },
                 {
                     ""name"": """",
-                    ""id"": ""5693e57a-238a-46ed-b5ae-e64e6e574302"",
-                    ""path"": ""<Touchscreen>/touch*/position"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Touch"",
-                    ""action"": ""Point"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""4faf7dc9-b979-4210-aa8c-e808e1ef89f5"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
@@ -1274,17 +1394,6 @@ namespace PlayerControls
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Click"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""47c2a644-3ebc-4dae-a106-589b7ca75b59"",
-                    ""path"": ""<Touchscreen>/touch*/press"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Touch"",
                     ""action"": ""Click"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -1387,17 +1496,6 @@ namespace PlayerControls
             ]
         },
         {
-            ""name"": ""Touch"",
-            ""bindingGroup"": ""Touch"",
-            ""devices"": [
-                {
-                    ""devicePath"": ""<Touchscreen>"",
-                    ""isOptional"": false,
-                    ""isOR"": false
-                }
-            ]
-        },
-        {
             ""name"": ""Joystick"",
             ""bindingGroup"": ""Joystick"",
             ""devices"": [
@@ -1429,8 +1527,14 @@ namespace PlayerControls
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
             m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
             m_Player_Slide = m_Player.FindAction("Slide", throwIfNotFound: true);
-            m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
-            m_Player_Dodge = m_Player.FindAction("Dodge", throwIfNotFound: true);
+            m_Player_ForwardDash = m_Player.FindAction("ForwardDash", throwIfNotFound: true);
+            m_Player_BackwardDash = m_Player.FindAction("BackwardDash", throwIfNotFound: true);
+            m_Player_LeftDash = m_Player.FindAction("LeftDash", throwIfNotFound: true);
+            m_Player_RightDash = m_Player.FindAction("RightDash", throwIfNotFound: true);
+            m_Player_ForwardDodge = m_Player.FindAction("ForwardDodge", throwIfNotFound: true);
+            m_Player_BackwardDodge = m_Player.FindAction("BackwardDodge", throwIfNotFound: true);
+            m_Player_LeftDodge = m_Player.FindAction("LeftDodge", throwIfNotFound: true);
+            m_Player_RightDodge = m_Player.FindAction("RightDodge", throwIfNotFound: true);
             m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
             m_Player_Parry = m_Player.FindAction("Parry", throwIfNotFound: true);
             m_Player_Ability1 = m_Player.FindAction("Ability1", throwIfNotFound: true);
@@ -1514,8 +1618,14 @@ namespace PlayerControls
         private readonly InputAction m_Player_Jump;
         private readonly InputAction m_Player_Crouch;
         private readonly InputAction m_Player_Slide;
-        private readonly InputAction m_Player_Dash;
-        private readonly InputAction m_Player_Dodge;
+        private readonly InputAction m_Player_ForwardDash;
+        private readonly InputAction m_Player_BackwardDash;
+        private readonly InputAction m_Player_LeftDash;
+        private readonly InputAction m_Player_RightDash;
+        private readonly InputAction m_Player_ForwardDodge;
+        private readonly InputAction m_Player_BackwardDodge;
+        private readonly InputAction m_Player_LeftDodge;
+        private readonly InputAction m_Player_RightDodge;
         private readonly InputAction m_Player_Fire;
         private readonly InputAction m_Player_Parry;
         private readonly InputAction m_Player_Ability1;
@@ -1532,8 +1642,14 @@ namespace PlayerControls
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
             public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
             public InputAction @Slide => m_Wrapper.m_Player_Slide;
-            public InputAction @Dash => m_Wrapper.m_Player_Dash;
-            public InputAction @Dodge => m_Wrapper.m_Player_Dodge;
+            public InputAction @ForwardDash => m_Wrapper.m_Player_ForwardDash;
+            public InputAction @BackwardDash => m_Wrapper.m_Player_BackwardDash;
+            public InputAction @LeftDash => m_Wrapper.m_Player_LeftDash;
+            public InputAction @RightDash => m_Wrapper.m_Player_RightDash;
+            public InputAction @ForwardDodge => m_Wrapper.m_Player_ForwardDodge;
+            public InputAction @BackwardDodge => m_Wrapper.m_Player_BackwardDodge;
+            public InputAction @LeftDodge => m_Wrapper.m_Player_LeftDodge;
+            public InputAction @RightDodge => m_Wrapper.m_Player_RightDodge;
             public InputAction @Fire => m_Wrapper.m_Player_Fire;
             public InputAction @Parry => m_Wrapper.m_Player_Parry;
             public InputAction @Ability1 => m_Wrapper.m_Player_Ability1;
@@ -1567,12 +1683,30 @@ namespace PlayerControls
                     @Slide.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSlide;
                     @Slide.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSlide;
                     @Slide.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSlide;
-                    @Dash.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
-                    @Dash.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
-                    @Dash.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
-                    @Dodge.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDodge;
-                    @Dodge.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDodge;
-                    @Dodge.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDodge;
+                    @ForwardDash.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnForwardDash;
+                    @ForwardDash.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnForwardDash;
+                    @ForwardDash.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnForwardDash;
+                    @BackwardDash.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBackwardDash;
+                    @BackwardDash.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBackwardDash;
+                    @BackwardDash.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBackwardDash;
+                    @LeftDash.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLeftDash;
+                    @LeftDash.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLeftDash;
+                    @LeftDash.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLeftDash;
+                    @RightDash.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRightDash;
+                    @RightDash.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRightDash;
+                    @RightDash.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRightDash;
+                    @ForwardDodge.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnForwardDodge;
+                    @ForwardDodge.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnForwardDodge;
+                    @ForwardDodge.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnForwardDodge;
+                    @BackwardDodge.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBackwardDodge;
+                    @BackwardDodge.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBackwardDodge;
+                    @BackwardDodge.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBackwardDodge;
+                    @LeftDodge.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLeftDodge;
+                    @LeftDodge.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLeftDodge;
+                    @LeftDodge.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLeftDodge;
+                    @RightDodge.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRightDodge;
+                    @RightDodge.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRightDodge;
+                    @RightDodge.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRightDodge;
                     @Fire.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
                     @Fire.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
                     @Fire.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFire;
@@ -1613,12 +1747,30 @@ namespace PlayerControls
                     @Slide.started += instance.OnSlide;
                     @Slide.performed += instance.OnSlide;
                     @Slide.canceled += instance.OnSlide;
-                    @Dash.started += instance.OnDash;
-                    @Dash.performed += instance.OnDash;
-                    @Dash.canceled += instance.OnDash;
-                    @Dodge.started += instance.OnDodge;
-                    @Dodge.performed += instance.OnDodge;
-                    @Dodge.canceled += instance.OnDodge;
+                    @ForwardDash.started += instance.OnForwardDash;
+                    @ForwardDash.performed += instance.OnForwardDash;
+                    @ForwardDash.canceled += instance.OnForwardDash;
+                    @BackwardDash.started += instance.OnBackwardDash;
+                    @BackwardDash.performed += instance.OnBackwardDash;
+                    @BackwardDash.canceled += instance.OnBackwardDash;
+                    @LeftDash.started += instance.OnLeftDash;
+                    @LeftDash.performed += instance.OnLeftDash;
+                    @LeftDash.canceled += instance.OnLeftDash;
+                    @RightDash.started += instance.OnRightDash;
+                    @RightDash.performed += instance.OnRightDash;
+                    @RightDash.canceled += instance.OnRightDash;
+                    @ForwardDodge.started += instance.OnForwardDodge;
+                    @ForwardDodge.performed += instance.OnForwardDodge;
+                    @ForwardDodge.canceled += instance.OnForwardDodge;
+                    @BackwardDodge.started += instance.OnBackwardDodge;
+                    @BackwardDodge.performed += instance.OnBackwardDodge;
+                    @BackwardDodge.canceled += instance.OnBackwardDodge;
+                    @LeftDodge.started += instance.OnLeftDodge;
+                    @LeftDodge.performed += instance.OnLeftDodge;
+                    @LeftDodge.canceled += instance.OnLeftDodge;
+                    @RightDodge.started += instance.OnRightDodge;
+                    @RightDodge.performed += instance.OnRightDodge;
+                    @RightDodge.canceled += instance.OnRightDodge;
                     @Fire.started += instance.OnFire;
                     @Fire.performed += instance.OnFire;
                     @Fire.canceled += instance.OnFire;
@@ -1764,15 +1916,6 @@ namespace PlayerControls
                 return asset.controlSchemes[m_GamepadSchemeIndex];
             }
         }
-        private int m_TouchSchemeIndex = -1;
-        public InputControlScheme TouchScheme
-        {
-            get
-            {
-                if (m_TouchSchemeIndex == -1) m_TouchSchemeIndex = asset.FindControlSchemeIndex("Touch");
-                return asset.controlSchemes[m_TouchSchemeIndex];
-            }
-        }
         private int m_JoystickSchemeIndex = -1;
         public InputControlScheme JoystickScheme
         {
@@ -1799,8 +1942,14 @@ namespace PlayerControls
             void OnJump(InputAction.CallbackContext context);
             void OnCrouch(InputAction.CallbackContext context);
             void OnSlide(InputAction.CallbackContext context);
-            void OnDash(InputAction.CallbackContext context);
-            void OnDodge(InputAction.CallbackContext context);
+            void OnForwardDash(InputAction.CallbackContext context);
+            void OnBackwardDash(InputAction.CallbackContext context);
+            void OnLeftDash(InputAction.CallbackContext context);
+            void OnRightDash(InputAction.CallbackContext context);
+            void OnForwardDodge(InputAction.CallbackContext context);
+            void OnBackwardDodge(InputAction.CallbackContext context);
+            void OnLeftDodge(InputAction.CallbackContext context);
+            void OnRightDodge(InputAction.CallbackContext context);
             void OnFire(InputAction.CallbackContext context);
             void OnParry(InputAction.CallbackContext context);
             void OnAbility1(InputAction.CallbackContext context);
