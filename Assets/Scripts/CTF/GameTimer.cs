@@ -17,6 +17,26 @@ public class GameTimer : MonoBehaviour
     {
         time_left = seconds;
     }
+    
+
+    private bool DoSingleton()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+            return false;
+        }
+        else
+        {
+            Instance = this;
+            return true;
+        }
+    }
+
+    void Awake()
+    {
+        if (!DoSingleton()) return;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -28,18 +48,5 @@ public class GameTimer : MonoBehaviour
     void Update()
     {
         time_left = Mathf.Max(time_left - Time.deltaTime, 0);
-    }
-
-    // Singleton Setup
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this);
-        }
-        else
-        {
-            Instance = this;
-        }
     }
 }

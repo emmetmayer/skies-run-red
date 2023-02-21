@@ -15,6 +15,26 @@ public class WinService : MonoBehaviour
 
         return false;
     }
+    
+
+    private bool DoSingleton()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+            return false;
+        }
+        else
+        {
+            Instance = this;
+            return true;
+        }
+    }
+
+    void Awake()
+    {
+        if (!DoSingleton()) return;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -26,18 +46,5 @@ public class WinService : MonoBehaviour
     void Update()
     {
         
-    }
-
-    // Singleton Setup
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this);
-        }
-        else
-        {
-            Instance = this;
-        }
     }
 }
