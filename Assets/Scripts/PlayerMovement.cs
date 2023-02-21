@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.VirtualTexturing;
 
+//might be better to just do enums for super broad states/contexts, and then do bools for other allowances
 public enum ControlState
 {
     NONE,
@@ -20,9 +21,6 @@ public enum PlayerState
     NONE,
     Grounded,
     Airborne,
-    
-    //i can do like. sliding/double-jumped but im not sure
-    //might need to do this for multi step abilities/basic combos
 }
 public enum CardinalDirections
 {
@@ -178,6 +176,7 @@ public class PlayerMovement : MonoBehaviour
     public void OnJump()
     {
         //set y velocity
+        if (_pState == PlayerState.Grounded) _cState = ControlState.NONE;
         if (_cState == ControlState.DoubleJumped || _cState == ControlState.ControlLocked)
         {
             return;
