@@ -350,12 +350,12 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 2
+  m_Height: 2.5
   m_Radius: 0.5
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
+  m_MinMoveDistance: 0.0001
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &764826985
 MonoBehaviour:
@@ -372,12 +372,14 @@ MonoBehaviour:
   _ccRef: {fileID: 764826984}
   _rbRef: {fileID: 764826986}
   _piRef: {fileID: 764826982}
-  Speed: 10
-  MouseXSense: 1
   Gravity: 4
+  MouseXSense: 1
+  Speed: 10
   Jump: 80
   DashDistance: 200
-  DodgeDistance: 300
+  DashCooldown: 5
+  DodgeDistance: 50
+  DodgeCooldown: 0.5
 --- !u!54 &764826986
 Rigidbody:
   m_ObjectHideFlags: 0

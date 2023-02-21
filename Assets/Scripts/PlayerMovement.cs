@@ -5,17 +5,25 @@ using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.VirtualTexturing;
 
-public enum PlayerState
+public enum ControlState
 {
     NONE,
     ControlLocked, //use this when you dont want the player to move
+    DoubleJumped,
+    
+    //i can do like. sliding/double-jumped but im not sure
+    //might need to do this for multi step abilities/basic combos
+}
+
+public enum PlayerState
+{
+    NONE,
     Grounded,
     Airborne,
     
     //i can do like. sliding/double-jumped but im not sure
     //might need to do this for multi step abilities/basic combos
 }
-
 public enum CardinalDirections
 {
     Forward,
@@ -25,21 +33,31 @@ public enum CardinalDirections
 }
 public class PlayerMovement : MonoBehaviour
 {
-    private PlayerState _state;
+    private ControlState _cState;
+    private PlayerState _pState;
 
+    [Header("References to relevant components")]
     [SerializeField] private CharacterController _ccRef;
     [SerializeField] private Rigidbody _rbRef;
     [SerializeField] private PlayerInput _piRef;
 
-    public float Speed = 5f;
-    public float MouseXSense = 5f;
-
-    private float _mouseXFactor = 1f;
-
+    [Header("Movement Specs")]
     public float Gravity;
+    public float MouseXSense = 5f;
+    public float Speed = 5f;
     public float Jump;
+    
+    private float _mouseXFactor = 1f;
+    
+    [Header("Dash Traits")]
     public float DashDistance;
+    public float DashCooldown;
+    private float _lastDash;
+    
+    [Header("Dodge Traits")]
     public float DodgeDistance;
+    public float DodgeCooldown;
+    private float _lastDodge;
     private float _verticalVelocity = 0f;
     // Start is called before the first frame update
     void Start()
@@ -50,7 +68,9 @@ public class PlayerMovement : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+    { 
+        _pState = _ccRef.isGrounded ? PlayerState.Grounded : PlayerState.Airborne;
+        
         HandleLook();
         //default player move
         HandleMove();
@@ -158,7 +178,12 @@ public class PlayerMovement : MonoBehaviour
     public void OnJump()
     {
         //set y velocity
+        if (_cState == ControlState.DoubleJumped || _cState == ControlState.ControlLocked)
+        {
+            return;
+        }
         _verticalVelocity = Jump;
+        if (_pState == PlayerState.Airborne) _cState = ControlState.DoubleJumped;
     }
     
     public void OnSlide()
@@ -192,6 +217,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void Dash(CardinalDirections dir)
     {
+        if (Time.time - _lastDash < DashCooldown)
+        {
+            return;
+        }
+
+        _lastDash = Time.time;
         //add cd check
         Vector3 moveDir;
         switch (dir)
@@ -232,6 +263,13 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Dodge(CardinalDirections dir)
     {
+        if (Time.time - _lastDodge < DodgeCooldown)
+        {
+            return;
+        }
+
+        _lastDodge = Time.time;
+        
         //add cd check
         Debug.Log("Dodging");
         //lock input? do short, fast movement
