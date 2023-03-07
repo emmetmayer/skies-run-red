@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using UnityEditor.Timeline.Actions;
 using UnityEngine;
 
 namespace Abilities
@@ -17,10 +19,13 @@ namespace Abilities
     {
         public string Name;
         public Element Type;
+        private bool onCD;
         public int SegmentCount
         {
             get => Segments.Length;
         }
+
+        private int SegmentIndex = 0;
         public Segment[] Segments;
         
         //possibly defunct
@@ -60,6 +65,24 @@ namespace Abilities
             if (index >= 0 && index < Segments.Length) return Segments[index].GetCooldown();
             else if (index < 0) throw new Exception("Index may not be negative");
             else throw new Exception("Index exceeds the number of segments of this ability");
+        }
+
+        public void Use()
+        {
+            if (onCD) return;
+            
+            Segments[SegmentIndex].Perform();
+            SegmentIndex++;
+            if (SegmentIndex >= SegmentCount)
+            {
+                onCD = true;
+                Task.Delay(TimeSpan.FromSeconds(Segments[^1].GetCooldown())).ContinueWith(t => CoolDownTracker());
+            }
+        }
+
+        private void CoolDownTracker()
+        {
+            onCD = false;
         }
     }
 
