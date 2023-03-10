@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class Team
 {
@@ -23,12 +24,12 @@ public class TeamService : MonoBehaviour
 
     bool DoesTeamExist(int TeamID)
     {
-        return TeamID <= teams.Count;
+        return TeamID >= 0 && TeamID < teams.Count;
     }
 
     int CreateTeam()
     {
-        int newTeamID = teams.Count + 1; // 0 == no team
+        int newTeamID = teams.Count; // -1 == no team
         Team newTeam = new Team(newTeamID);
         teams.Add(newTeam);
         return newTeamID;
@@ -36,50 +37,39 @@ public class TeamService : MonoBehaviour
 
     Team GetTeam(int TeamID)
     {
-        return teams[TeamID-1];
+        return teams[TeamID];
     }
 
-    public bool JoinTeam(PlayerMain player, int TeamID)
+    bool IsPlayerOnTeam(Agent A)
     {
-        // Useless right now, all players are automatically set to teams
-        /*
-        if (!DoesTeamExist(TeamID))
-        {
-            return false;
-        }
-        if (!IsPlayerOnTeam(player))
-        {
-            return false;
-        }
-        player.SetTeamID(TeamID);
-        */
-        return true;
+        return A.TeamID != -1;
     }
 
-    bool IsPlayerOnTeam(PlayerMain A)
+    bool ArePlayersOnSameTeam(Agent A, Agent B)
     {
-        return A.GetTeamID() != 0;
-    }
-
-    bool ArePlayersOnSameTeam(PlayerMain A, PlayerMain B)
-    {
-        return IsPlayerOnTeam(A) && A.GetTeamID() == B.GetTeamID();
+        return IsPlayerOnTeam(A) && A.TeamID == B.TeamID;
     }
 
 
-    public void SpawnPlayer(PlayerMain player)
+    public void SpawnAgent(Agent agent)
     {
-        int TeamID = player.GetTeamID();
+        int TeamID = agent.TeamID;
         if (!DoesTeamExist(TeamID))
         {
             return;
         }
 
+        if (!agent.Character)
+        {
+            agent.LoadCharacter();
+        }
+
         Team team = GetTeam(TeamID);
         int numSpawnpads = team.Spawnpads.Count;
+        Assert.IsTrue(numSpawnpads > 0);
         Spawnpad randomSpawnpad = team.Spawnpads[Random.Range(0, numSpawnpads-1)];
         Vector3 spawn_position = randomSpawnpad.GetSpawnPosition();
-        player.transform.position = spawn_position;
+        agent.Character.transform.position = spawn_position;
     }
 
 
@@ -102,8 +92,8 @@ public class TeamService : MonoBehaviour
         if (!DoSingleton()) return;
 
         teams = new List<Team>();
+        CreateTeam(); // TeamID: 0
         CreateTeam(); // TeamID: 1
-        CreateTeam(); // TeamID: 2
 
         var allSpawnpads = Object.FindObjectsOfType<Spawnpad>();
         for (int i = 0; i < allSpawnpads.Length; i++)
