@@ -15,11 +15,15 @@ public class AgentCharacter : MonoBehaviour
 
     //theres probably multiple of both of these?
     [Tooltip("When this collides with the enemy's hitbox they take damage")]
-    private Collider _hurtBox;
+    private List<Collider> _hurtBox;
     [Tooltip("When this collides with the enemy's hurtbox I take damage")]
-    private Collider _hitBox;
+    private List<Collider> _hitBox;
     private bool isDefending = false;
 
+    public void Start()
+    {
+
+    }
 
     public void OnDied()
     {
@@ -30,6 +34,8 @@ public class AgentCharacter : MonoBehaviour
         // TODO: ragdoll or other death effect
     }
 
+    //QUESTION: should we just localize all of take damage here? 
+    //since this stores both the colliders for damage and the health it probably makes more sense
     public float ModifyHealth(float amount)
     {
         if (isDefending)

@@ -271,7 +271,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_CurrentHolder: {fileID: 0}
-  m_FlagOffset: {x: 0, y: 1.5, z: 0}
+  m_FlagOffset: {x: 0, y: 0, z: 0}
   m_TeamID: 0
   m_StoredPoints: 0
   m_CurrentHoldTime: 0
@@ -346,7 +346,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 881851162}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3, y: 1, z: 0}
+  m_LocalPosition: {x: -30, y: 1, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -386,8 +386,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_CurrentHolder: {fileID: 0}
-  m_FlagOffset: {x: 0, y: 1.5, z: 0}
-  m_TeamID: 1
+  m_FlagOffset: {x: 0, y: 0, z: 0}
+  m_TeamID: 0
   m_StoredPoints: 0
   m_CurrentHoldTime: 0
 --- !u!65 &1017654616
@@ -461,7 +461,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1017654614}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3, y: 1, z: 0}
+  m_LocalPosition: {x: 30, y: 1, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -483,7 +483,7 @@ PrefabInstance:
     - target: {fileID: 8806116259470083936, guid: 71508d716b4925340a054d80e5449de8,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5
+      value: -150
       objectReference: {fileID: 0}
     - target: {fileID: 8806116259470083936, guid: 71508d716b4925340a054d80e5449de8,
         type: 3}
@@ -670,7 +670,7 @@ PrefabInstance:
     - target: {fileID: 8806116259470083936, guid: 71508d716b4925340a054d80e5449de8,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 8806116259470083936, guid: 71508d716b4925340a054d80e5449de8,
         type: 3}
@@ -904,7 +904,7 @@ Transform:
   m_GameObject: {fileID: 1901539365}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 40, y: 1, z: 40}
+  m_LocalScale: {x: 400, y: 1, z: 400}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
