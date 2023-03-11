@@ -292,6 +292,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 854707622163562360}
+  - component: {fileID: 8358037522667026420}
   - component: {fileID: 854707622163562361}
   - component: {fileID: 854707622163562358}
   - component: {fileID: 854707622163562359}
@@ -322,6 +323,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8358037522667026420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854707622163562362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5e4b2876f710eb44aa06d0a43a20910, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MaxHealth: 100
 --- !u!114 &854707622163562361
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -368,12 +382,14 @@ MonoBehaviour:
   _ccRef: {fileID: 854707622163562359}
   _rbRef: {fileID: 854707622163562357}
   _piRef: {fileID: 854707622163562361}
-  Speed: 10
-  MouseXSense: 1
   Gravity: 4
+  MouseXSense: 1
+  Speed: 3
   Jump: 80
   DashDistance: 200
+  DashCooldown: 0
   DodgeDistance: 300
+  DodgeCooldown: 0
 --- !u!143 &854707622163562359
 CharacterController:
   m_ObjectHideFlags: 0

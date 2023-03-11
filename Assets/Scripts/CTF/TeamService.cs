@@ -7,69 +7,70 @@ public class Team
 {
     public Team(int teamID)
     {
-        TeamID = teamID;
-        Spawnpads = new List<Spawnpad>();
+        m_TeamID = teamID;
+        m_Spawnpads = new List<Spawnpad>();
     }
 
-    public int TeamID {get; private set;}
-    public List<Spawnpad> Spawnpads {get; private set;}
+    public int m_TeamID {get; private set;}
+    public List<Spawnpad> m_Spawnpads {get; private set;}
 
-    public override string ToString() => $"Team {TeamID}";
+    public override string ToString() => $"Team {m_TeamID}";
 }
 
 public class TeamService : MonoBehaviour
 {
     public static TeamService Instance {get; private set;}
-    private List<Team> teams;
+    
+    private List<Team> m_Teams;
 
     bool DoesTeamExist(int TeamID)
     {
-        return TeamID >= 0 && TeamID < teams.Count;
+        return TeamID >= 0 && TeamID < m_Teams.Count;
     }
 
     int CreateTeam()
     {
-        int newTeamID = teams.Count; // -1 == no team
+        int newTeamID = m_Teams.Count; // -1 == no team
         Team newTeam = new Team(newTeamID);
-        teams.Add(newTeam);
+        m_Teams.Add(newTeam);
         return newTeamID;
     }
 
     Team GetTeam(int TeamID)
     {
-        return teams[TeamID];
+        return m_Teams[TeamID];
     }
 
     bool IsPlayerOnTeam(Agent A)
     {
-        return A.TeamID != -1;
+        return A.m_TeamID != -1;
     }
 
     bool ArePlayersOnSameTeam(Agent A, Agent B)
     {
-        return IsPlayerOnTeam(A) && A.TeamID == B.TeamID;
+        return IsPlayerOnTeam(A) && A.m_TeamID == B.m_TeamID;
     }
 
 
     public void SpawnAgent(Agent agent)
     {
-        int TeamID = agent.TeamID;
+        int TeamID = agent.m_TeamID;
         if (!DoesTeamExist(TeamID))
         {
             return;
         }
 
-        if (!agent.Character)
+        if (!agent.m_Character)
         {
             agent.LoadCharacter();
         }
 
         Team team = GetTeam(TeamID);
-        int numSpawnpads = team.Spawnpads.Count;
+        int numSpawnpads = team.m_Spawnpads.Count;
         Assert.IsTrue(numSpawnpads > 0);
-        Spawnpad randomSpawnpad = team.Spawnpads[Random.Range(0, numSpawnpads-1)];
+        Spawnpad randomSpawnpad = team.m_Spawnpads[Random.Range(0, numSpawnpads-1)];
         Vector3 spawn_position = randomSpawnpad.GetSpawnPosition();
-        agent.Character.transform.position = spawn_position;
+        agent.m_Character.transform.position = spawn_position;
     }
 
 
@@ -91,31 +92,19 @@ public class TeamService : MonoBehaviour
     {
         if (!DoSingleton()) return;
 
-        teams = new List<Team>();
+        m_Teams = new List<Team>();
         CreateTeam(); // TeamID: 0
         CreateTeam(); // TeamID: 1
 
         var allSpawnpads = Object.FindObjectsOfType<Spawnpad>();
         for (int i = 0; i < allSpawnpads.Length; i++)
         {
-            int TeamID = allSpawnpads[i].TeamID;
+            int TeamID = allSpawnpads[i].m_TeamID;
             if (!DoesTeamExist(TeamID))
             {
                 continue;
             }
-            GetTeam(TeamID).Spawnpads.Add(allSpawnpads[i]);
+            GetTeam(TeamID).m_Spawnpads.Add(allSpawnpads[i]);
         }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

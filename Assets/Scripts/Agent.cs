@@ -4,72 +4,58 @@ using UnityEngine;
 
 public class Agent
 {
-    [SerializeField] public string Name {get; private set;}
-    [SerializeField] public int TeamID {get; private set;}
-    [SerializeField] public GameObject Character {get; private set;}
+    [SerializeField] public AgentCharacter m_Character {get; private set;}
+    [SerializeField] public string m_Name {get; private set;}
+    [SerializeField] public int m_TeamID {get; private set;}
 
-    private float Health;
-    //theres probably multiple of both of these?
-    [Tooltip("When this collides with the enemy's hitbox they take damage")]
-    private Collider _hurtBox;
-    [Tooltip("When this collides with the enemy's hurtbox I take damage")]
-    private Collider _hitBox;
-
-    private bool isDefending;
+    [SerializeField] public float m_RespawnTime {get; private set;} = 5.0f;
     
-    public Agent(string _name, int _teamID)
+    public Agent(string name, int teamID)
     {
-        Name = _name;
-        TeamID = _teamID;
-        Spawn();
+        m_Name = name;
+        m_TeamID = teamID;
+
+        LoadCharacter();
+        TeamService.Instance.SpawnAgent(this);
     }
 
     public void LoadCharacter()
     {
-        if (Character)
+        if (m_Character)
         {
-            GameObject.Destroy(Character);
+            GameObject.Destroy(m_Character);
         }
-        Character = GameObject.Instantiate(Resources.Load("Character", typeof(GameObject)), GameObject.Find("Agents").transform) as GameObject;
-        //grab all the relevant colliders here
+        GameObject newCharacter = GameObject.Instantiate(Resources.Load("Character", typeof(GameObject)), AgentService.Instance.m_AgentContainer) as GameObject;
+        m_Character = newCharacter.GetComponent<AgentCharacter>();
+        m_Character.New(this);
     }
 
-    private void Spawn()
+
+    IEnumerator Died()
     {
-        TeamService.Instance.SpawnAgent(this);
-        //should this run LoadCharacter here?
+        m_Character.OnDied();
+        yield return new WaitForSeconds(m_RespawnTime);
+        LoadCharacter();
     }
 
-    public override string ToString()
+    // Returns true if damage caused player to die
+    public bool TakeDamage(float n)
     {
-        return Name;
-    }
+        if (!m_Character) return false;
 
-    //return true if damage caused player to die
-    public bool TakeDamage(int n)
-    {
-        if (isDefending)
+        float healthChange = m_Character.ModifyHealth(-n);
+        if (healthChange > 0 && m_Character.m_Health < 0)
         {
-            //process attack differently
-        }
-
-        if(n > 0) Health -= n;
-        if (Health < 0)
-        {
-            HandleDeath();
+            CTFManager.Instance.StartCoroutine(Died());
             return true;
         }
 
         return false;
     }
+    
 
-    public void HandleDeath()
+    public override string ToString()
     {
-        //spawn timer
-        //body ragdoll?
-        //reset values
+        return m_Name;
     }
-    
-    //gotta figure out how to do collision events?
-    
 }
