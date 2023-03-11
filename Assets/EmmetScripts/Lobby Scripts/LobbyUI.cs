@@ -19,7 +19,6 @@ public class LobbyUI : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI gameModeText;
     [SerializeField] private Button startGameButton;
     [SerializeField] private Button leaveLobbyButton;
-    [SerializeField] private Button startGameButton;
 
 
     private void Awake() {
