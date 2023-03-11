@@ -5,16 +5,18 @@ using UnityEngine;
 public class AgentService : MonoBehaviour
 {
     public static AgentService Instance {get; private set;}
-    [SerializeField] private List<Agent> agents;
+
+    [SerializeField] private List<Agent> m_Agents;
+    public Transform m_AgentContainer {get; private set;}
 
     void AddAgent(string _name, int _teamID = -1)
     {
         string name = _name;
-        if (_teamID == -1) _teamID = (agents.Count % 2);
+        if (_teamID == -1) _teamID = (m_Agents.Count % 2);
         int teamID = _teamID;
 
         Agent newPlayer = new Agent(name, teamID);
-        agents.Add(newPlayer);
+        m_Agents.Add(newPlayer);
     }
 
     private bool DoSingleton()
@@ -35,21 +37,15 @@ public class AgentService : MonoBehaviour
     {
         if (!DoSingleton()) return;
 
-        agents = new List<Agent>();
+        m_Agents = new List<Agent>();
+        m_AgentContainer = (new GameObject("AgentContainer")).transform;
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         AddAgent("PLAYER_1");
         AddAgent("PLAYER_2");
         AddAgent("PLAYER_3");
         AddAgent("PLAYER_4");
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

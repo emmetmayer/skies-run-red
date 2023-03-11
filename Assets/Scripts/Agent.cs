@@ -4,33 +4,58 @@ using UnityEngine;
 
 public class Agent
 {
-    [SerializeField] public string Name {get; private set;}
-    [SerializeField] public int TeamID {get; private set;}
-    [SerializeField] public GameObject Character {get; private set;}
+    [SerializeField] public AgentCharacter m_Character {get; private set;}
+    [SerializeField] public string m_Name {get; private set;}
+    [SerializeField] public int m_TeamID {get; private set;}
 
-    public Agent(string _name, int _teamID)
+    [SerializeField] public float m_RespawnTime {get; private set;} = 5.0f;
+    
+    public Agent(string name, int teamID)
     {
-        Name = _name;
-        TeamID = _teamID;
-        Spawn();
+        m_Name = name;
+        m_TeamID = teamID;
+
+        LoadCharacter();
+        TeamService.Instance.SpawnAgent(this);
     }
 
     public void LoadCharacter()
     {
-        if (Character)
+        if (m_Character)
         {
-            GameObject.Destroy(Character);
+            GameObject.Destroy(m_Character);
         }
-        Character = GameObject.Instantiate(Resources.Load("Character", typeof(GameObject)), GameObject.Find("Agents").transform) as GameObject;
+        GameObject newCharacter = GameObject.Instantiate(Resources.Load("Character", typeof(GameObject)), AgentService.Instance.m_AgentContainer) as GameObject;
+        m_Character = newCharacter.GetComponent<AgentCharacter>();
+        m_Character.New(this);
     }
 
-    private void Spawn()
+
+    IEnumerator Died()
     {
-        TeamService.Instance.SpawnAgent(this);
+        m_Character.OnDied();
+        yield return new WaitForSeconds(m_RespawnTime);
+        LoadCharacter();
     }
+
+    // Returns true if damage caused player to die
+    public bool TakeDamage(float n)
+    {
+        if (!m_Character) return false;
+
+        float healthChange = m_Character.ModifyHealth(-n);
+        if (healthChange > 0 && m_Character.m_Health < 0)
+        {
+            CTFManager.Instance.StartCoroutine(Died());
+            return true;
+        }
+
+        return false;
+    }
+    
 
     public override string ToString()
     {
-        return Name;
+        return m_Name;
     }
 }
