@@ -42,5 +42,9 @@ public class GameTimer : MonoBehaviour
     void Update()
     {
         m_TimeLeft = Mathf.Max(m_TimeLeft - Time.deltaTime, 0);
+        if (m_TimeLeft <= 0)
+        {
+            WinService.Instance.IsGameOver();
+        }
     }
 }
