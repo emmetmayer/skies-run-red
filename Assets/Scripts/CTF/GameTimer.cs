@@ -6,6 +6,7 @@ public class GameTimer : MonoBehaviour
 {
     public static GameTimer Instance {get; private set;}
     
+    [Range(0, 600)]
     [SerializeField] private float m_TimeLeft = 0;
 
     public float GetTimeLeft()

@@ -14,7 +14,7 @@ public class Flag : MonoBehaviour
 
     // CTF data
     [SerializeField] public int m_TeamID;
-    [SerializeField] private float m_StoredPoints;
+    [SerializeField] private float m_StoredPoints = 1f;
     [SerializeField] private float m_CurrentHoldTime;
 
 
@@ -28,11 +28,12 @@ public class Flag : MonoBehaviour
         this.transform.SetParent(m_Stand);
         this.transform.position = m_StandOffset;
         m_IsOnStand = true;
+        m_StoredPoints = 1;
     }
 
     public void ScorePoints(int byTeamID)
     {
-        // Do point gain
+        TeamService.Instance.GetTeam(byTeamID).AddScore(m_StoredPoints);
         ReturnToStand();
     }
 

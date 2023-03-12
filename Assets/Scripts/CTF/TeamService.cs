@@ -9,10 +9,18 @@ public class Team
     {
         m_TeamID = teamID;
         m_Spawnpads = new List<Spawnpad>();
+        m_Score = 0;
     }
 
     public int m_TeamID {get; private set;}
     public List<Spawnpad> m_Spawnpads {get; private set;}
+    public float m_Score {get; private set;}
+
+    public void AddScore(float toAdd)
+    {
+        Assert.IsTrue(toAdd > 0);
+        m_Score += toAdd;
+    }
 
     public override string ToString() => $"Team {m_TeamID}";
 }
@@ -36,7 +44,7 @@ public class TeamService : MonoBehaviour
         return newTeamID;
     }
 
-    Team GetTeam(int TeamID)
+    public Team GetTeam(int TeamID)
     {
         return m_Teams[TeamID];
     }
