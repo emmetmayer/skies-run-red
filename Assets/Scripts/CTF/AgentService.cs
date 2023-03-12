@@ -43,9 +43,6 @@ public class AgentService : MonoBehaviour
 
     void Start()
     {
-        AddAgent("PLAYER_1");
-        AddAgent("PLAYER_2");
-        AddAgent("PLAYER_3");
-        AddAgent("PLAYER_4");
+        AddAgent("PLAYER_1"); // TODO: Add agents based on join information
     }
 }

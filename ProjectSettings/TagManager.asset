@@ -5,8 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Flag
-  - Hitbox
-  - Hurtbox
+  - FlagStand
   layers:
   - Default
   - TransparentFX

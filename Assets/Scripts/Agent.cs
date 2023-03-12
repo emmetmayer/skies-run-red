@@ -18,6 +18,7 @@ public class Agent
         LoadCharacter();
         TeamService.Instance.SpawnAgent(this);
     }
+    
 
     public void LoadCharacter()
     {
@@ -30,27 +31,10 @@ public class Agent
         m_Character.New(this);
     }
 
-
-    IEnumerator Died()
+    public IEnumerator Died()
     {
-        m_Character.OnDied();
         yield return new WaitForSeconds(m_RespawnTime);
         LoadCharacter();
-    }
-
-    // Returns true if damage caused player to die
-    public bool TakeDamage(float n)
-    {
-        if (!m_Character) return false;
-
-        float healthChange = m_Character.ModifyHealth(-n);
-        if (healthChange > 0 && m_Character.m_Health < 0)
-        {
-            CTFManager.Instance.StartCoroutine(Died());
-            return true;
-        }
-
-        return false;
     }
     
 

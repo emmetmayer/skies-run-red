@@ -125,7 +125,7 @@ namespace PlayerControls
                     ""id"": ""c07f1c39-9507-4264-a92f-eba63e9040c6"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""MultiTap(tapDelay=0.2)"",
+                    ""interactions"": ""MultiTap"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -134,7 +134,7 @@ namespace PlayerControls
                     ""id"": ""ccf63402-d0f2-4f29-92de-0bdda2eff91e"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""MultiTap(tapDelay=0.2)"",
+                    ""interactions"": ""MultiTap"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -143,7 +143,7 @@ namespace PlayerControls
                     ""id"": ""753e84b7-fd46-4ad0-bc99-9d6c9cc70884"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""MultiTap(tapDelay=0.2)"",
+                    ""interactions"": ""MultiTap"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -152,7 +152,7 @@ namespace PlayerControls
                     ""id"": ""16a881d0-4fd6-4291-92ed-06a1fef46adb"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""MultiTap(tapDelay=0.2)"",
+                    ""interactions"": ""MultiTap"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -811,7 +811,7 @@ namespace PlayerControls
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": """",
                     ""action"": ""BackwardDodge"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -822,7 +822,7 @@ namespace PlayerControls
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": """",
                     ""action"": ""LeftDodge"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -833,7 +833,7 @@ namespace PlayerControls
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
+                    ""groups"": """",
                     ""action"": ""RightDodge"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
