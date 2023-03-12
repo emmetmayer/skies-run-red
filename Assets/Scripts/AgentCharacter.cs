@@ -28,6 +28,7 @@ public class AgentCharacter : MonoBehaviour
             m_HeldFlag.Drop();
         }
         // TODO: ragdoll or other death effect
+        CTFManager.Instance.StartCoroutine(m_Agent.Died());
     }
 
     public float ModifyHealth(float amount)
@@ -39,7 +40,13 @@ public class AgentCharacter : MonoBehaviour
 
         float newHealth = m_Health + amount;
         m_Health = Mathf.Clamp(newHealth, 0, m_MaxHealth);
-        return Mathf.Abs(newHealth - m_Health);
+        float healthChange = Mathf.Abs(newHealth - m_Health);
+
+        if (healthChange > 0 && m_Health < 0)
+        {
+            OnDied();
+        }
+        return healthChange;
     }
 
 
@@ -52,6 +59,28 @@ public class AgentCharacter : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.tag == "FlagStand")
+        {
+            FlagStand flagStand = other.GetComponent<FlagStand>();
+            if (!flagStand) return;
+
+            if (flagStand.m_TeamID == m_Agent.m_TeamID)
+            {
+                if (m_HeldFlag)
+                {
+                    m_HeldFlag.ScorePoints(m_Agent.m_TeamID);
+                }
+            }
+            else
+            {
+                Transform flagObject = other.transform.Find("Flag");
+                if (flagObject)
+                {
+                    flagObject.GetComponent<Flag>().Grab(this);
+                }
+            }
+        }
+
         if (other.tag == "Flag")
         {
             other.GetComponent<Flag>().Grab(this);
