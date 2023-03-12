@@ -30,10 +30,10 @@ public class LobbyUI : MonoBehaviour {
             LobbyManager.Instance.LeaveLobby();
         });
 
-        /*startGameButton.onClick.AddListener(() => {
+        startGameButton.onClick.AddListener(() => {
             LobbyManager.Instance.StartGame();
         });
-        */
+        
 
 
     }
@@ -51,6 +51,7 @@ public class LobbyUI : MonoBehaviour {
     {
         ClearLobby();
         Hide();
+        transform.parent.gameObject.SetActive(false);
     }
 
     private void LobbyManager_OnLeftLobby(object sender, System.EventArgs e) {
