@@ -32,7 +32,7 @@ public enum CardinalDirections
 public class PlayerMovement : MonoBehaviour
 {
     private ControlState _cState;
-    private PlayerState _pState;
+    public PlayerState _pState;
 
     [Header("References to relevant components")]
     [SerializeField] private CharacterController _ccRef;
@@ -68,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     { 
         _pState = _ccRef.isGrounded ? PlayerState.Grounded : PlayerState.Airborne;
-        
+        //transform.rotation = Quaternion.Euler(0f,transform.rotation.y,0f);
         HandleLook();
         //default player move
         HandleMove();
@@ -123,8 +123,8 @@ public class PlayerMovement : MonoBehaviour
 
             int dir = delta.x > 0 ? 1 : -1;
 
-            transform.Rotate(new Vector3(0f, dir * MouseXSense * _mouseXFactor,0f), Space.Self);
-            
+            transform.Rotate(new Vector3(0f, dir * MouseXSense * _mouseXFactor, 0f), Space.World);
+
 
         }
 

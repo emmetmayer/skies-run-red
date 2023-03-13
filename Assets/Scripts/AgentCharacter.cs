@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -91,5 +92,12 @@ public class AgentCharacter : MonoBehaviour
         {
             other.GetComponent<Flag>().Grab(this);
         }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        bool hit = collision.collider.CompareTag("Hitbox");
+        
+        //throw new NotImplementedException();)
     }
 }
