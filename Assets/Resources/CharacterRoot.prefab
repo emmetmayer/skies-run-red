@@ -577,7 +577,7 @@ MonoBehaviour:
   Gravity: 0.5
   MouseXSense: 1
   Speed: 5
-  Jump: 25
+  JumpForce: 25
   TurnSmoothVelocity: 0
   VerticalLook: 1.32
   DashDistance: 200
