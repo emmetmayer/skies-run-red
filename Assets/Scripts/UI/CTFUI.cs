@@ -19,8 +19,10 @@ public class CTFUI : MonoBehaviour
     void DoUIUpdate()
     {
         m_Timer.text = ConvertSToMS(GameTimer.Instance.GetTimeLeft());
-        m_ScoreTeamA.text = string.Format("Team A: {0}", TeamService.Instance.GetTeam(0).m_Score);
-        m_ScoreTeamB.text = string.Format("Team B: {0}", TeamService.Instance.GetTeam(1).m_Score);
+
+        int maxScore = WinService.Instance.m_MaxScore;
+        m_ScoreTeamA.text = string.Format("Team A: {0} / {1}", TeamService.Instance.GetTeam(0).m_Score, maxScore);
+        m_ScoreTeamB.text = string.Format("Team B: {0} / {1}", TeamService.Instance.GetTeam(1).m_Score, maxScore);
     }
 
     // Start is called before the first frame update

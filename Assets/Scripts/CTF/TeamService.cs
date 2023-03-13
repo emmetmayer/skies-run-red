@@ -18,8 +18,10 @@ public class Team
 
     public void AddScore(float toAdd)
     {
+        if (WinService.Instance.m_IsGameOver) return;
         Assert.IsTrue(toAdd > 0);
         m_Score += toAdd;
+        WinService.Instance.IsGameOver();
     }
 
     public override string ToString() => $"Team {m_TeamID}";
@@ -47,6 +49,11 @@ public class TeamService : MonoBehaviour
     public Team GetTeam(int TeamID)
     {
         return m_Teams[TeamID];
+    }
+
+    public List<Team> GetAllTeams()
+    {
+        return m_Teams;
     }
 
     bool IsPlayerOnTeam(Agent A)

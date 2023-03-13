@@ -10,6 +10,7 @@ public class Flag : MonoBehaviour
 
     private Transform m_Stand;
     private Vector3 m_StandOffset;
+    private Quaternion m_OriginalRot;
     private bool m_IsOnStand;
 
     // CTF data
@@ -25,8 +26,11 @@ public class Flag : MonoBehaviour
             m_CurrentHolder.m_HeldFlag = null;
             m_CurrentHolder = null;
         }
+
         this.transform.SetParent(m_Stand);
         this.transform.position = m_StandOffset;
+        this.transform.rotation = m_OriginalRot;
+
         m_IsOnStand = true;
         m_StoredPoints = 1;
     }
@@ -47,8 +51,12 @@ public class Flag : MonoBehaviour
             m_CurrentHolder = agentChar;
             agentChar.m_HeldFlag = this;
             m_CurrentHoldTime = 0;
-            this.transform.SetParent(agentChar.transform);
+            
             this.transform.position = agentChar.transform.position + m_FlagOffset;
+            Vector3 ea = agentChar.transform.rotation.eulerAngles;
+            this.transform.rotation = Quaternion.Euler(ea.x, ea.y + 90, ea.z + 90);
+            this.transform.SetParent(agentChar.transform);
+
             m_IsOnStand = false;
         }
         else if (!m_IsOnStand)
@@ -82,6 +90,7 @@ public class Flag : MonoBehaviour
     {
         m_Stand = this.transform.parent;
         m_StandOffset = this.transform.position;
+        m_OriginalRot = this.transform.rotation;
         m_IsOnStand = true;
     }
 
