@@ -1831,11 +1831,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6277d275dd185f4bb3bdd693f3d77f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSingleTemplate: {fileID: 8266299949590099105}
-  container: {fileID: 8266299949800727350}
+  playerSingleTemplate1: {fileID: 8266299949590099105}
+  playerSingleTemplate2: {fileID: 8266299949554687507}
+  container1: {fileID: 8266299949800727350}
+  container2: {fileID: 8266299949403335769}
   lobbyNameText: {fileID: 8266299949036120564}
   playerCountText: {fileID: 8266299949048784263}
-  gameModeText: {fileID: 0}
   startGameButton: {fileID: 8266299949507666612}
   leaveLobbyButton: {fileID: 8266299949414518569}
 --- !u!1 &8266299948704683438

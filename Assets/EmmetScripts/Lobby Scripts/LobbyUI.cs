@@ -12,11 +12,12 @@ public class LobbyUI : MonoBehaviour {
     public static LobbyUI Instance { get; private set; }
 
 
-    [SerializeField] private Transform playerSingleTemplate;
-    [SerializeField] private Transform container;
+    [SerializeField] private Transform playerSingleTemplate1;
+    [SerializeField] private Transform playerSingleTemplate2;
+    [SerializeField] private Transform container1;
+    [SerializeField] private Transform container2;
     [SerializeField] private TextMeshProUGUI lobbyNameText;
     [SerializeField] private TextMeshProUGUI playerCountText;
-    [SerializeField] private TextMeshProUGUI gameModeText;
     [SerializeField] private Button startGameButton;
     [SerializeField] private Button leaveLobbyButton;
 
@@ -24,7 +25,8 @@ public class LobbyUI : MonoBehaviour {
     private void Awake() {
         Instance = this;
 
-        playerSingleTemplate.gameObject.SetActive(false);
+        playerSingleTemplate1.gameObject.SetActive(false);
+        playerSingleTemplate2.gameObject.SetActive(false);
 
         leaveLobbyButton.onClick.AddListener(() => {
             LobbyManager.Instance.LeaveLobby();
@@ -71,7 +73,16 @@ public class LobbyUI : MonoBehaviour {
         ClearLobby();
 
         foreach (Player player in lobby.Players) {
-            Transform playerSingleTransform = Instantiate(playerSingleTemplate, container);
+            Transform playerSingleTransform = null;
+            if (player.Data[LobbyManager.KEY_PLAYER_TEAM].Value == "0")
+            {
+                playerSingleTransform = Instantiate(playerSingleTemplate1, container1);
+            }
+            else if (player.Data[LobbyManager.KEY_PLAYER_TEAM].Value == "1")
+            {
+                playerSingleTransform = Instantiate(playerSingleTemplate2, container2);
+            }
+
             playerSingleTransform.gameObject.SetActive(true);
             LobbyPlayerSingleUI lobbyPlayerSingleUI = playerSingleTransform.GetComponent<LobbyPlayerSingleUI>();
 
@@ -85,8 +96,14 @@ public class LobbyUI : MonoBehaviour {
     }
 
     private void ClearLobby() {
-        foreach (Transform child in container) {
-            if (child == playerSingleTemplate) continue;
+        foreach (Transform child in container1) 
+        {
+            if (child == playerSingleTemplate1) continue;
+            Destroy(child.gameObject);
+        }
+        foreach (Transform child in container2)
+        {
+            if (child == playerSingleTemplate2) continue;
             Destroy(child.gameObject);
         }
     }

@@ -12,6 +12,7 @@ public class LobbyManager : MonoBehaviour
     public static LobbyManager Instance { get; private set; }
 
     public const string KEY_PLAYER_NAME = "PlayerName";
+    public const string KEY_PLAYER_TEAM = "PlayerTeam";
     public const string KEY_START_GAME = "StartGame_RelayCode";
 
     public event EventHandler OnLeftLobby;
@@ -35,6 +36,7 @@ public class LobbyManager : MonoBehaviour
     private float refreshLobbyListTimer = 5f;
     private Lobby joinedLobby;
     private string playerName;
+    private string playerTeam;
 
 
     private void Awake()
@@ -153,6 +155,7 @@ public class LobbyManager : MonoBehaviour
     {
         return new Player(AuthenticationService.Instance.PlayerId, null, new Dictionary<string, PlayerDataObject> {
             { KEY_PLAYER_NAME, new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, playerName) },
+            { KEY_PLAYER_TEAM, new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, playerTeam) },
         });
     }
 
@@ -175,6 +178,27 @@ public class LobbyManager : MonoBehaviour
             Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
 
             joinedLobby = lobby;
+
+            try
+            {
+                string newTeam = ((joinedLobby.Players.Count - 1) % 2).ToString();
+                UpdatePlayerOptions playerOptions = new UpdatePlayerOptions();
+
+                playerOptions.Data = new Dictionary<string, PlayerDataObject>() {
+                    { KEY_PLAYER_TEAM, new PlayerDataObject(visibility: PlayerDataObject.VisibilityOptions.Member, value: newTeam) }
+                };
+
+                string playerId = AuthenticationService.Instance.PlayerId;
+
+                lobby = await LobbyService.Instance.UpdatePlayerAsync(joinedLobby.Id, playerId, playerOptions);
+                joinedLobby = lobby;
+
+                OnJoinedLobbyUpdate?.Invoke(this, new LobbyEventArgs { lobby = joinedLobby });
+            }
+            catch (LobbyServiceException e)
+            {
+                Debug.Log(e);
+            }
 
             OnJoinedLobby?.Invoke(this, new LobbyEventArgs { lobby = lobby });
         } 
@@ -246,7 +270,31 @@ public class LobbyManager : MonoBehaviour
             Player = player
         });
 
+
+        try
+        {
+            string newTeam = ((joinedLobby.Players.Count - 1) % 2).ToString();
+            UpdatePlayerOptions options = new UpdatePlayerOptions();
+
+            options.Data = new Dictionary<string, PlayerDataObject>() {
+                    { KEY_PLAYER_TEAM, new PlayerDataObject(visibility: PlayerDataObject.VisibilityOptions.Member, value: newTeam) }
+                };
+
+            string playerId = AuthenticationService.Instance.PlayerId;
+
+            lobby = await LobbyService.Instance.UpdatePlayerAsync(joinedLobby.Id, playerId, options);
+            joinedLobby = lobby;
+
+            OnJoinedLobbyUpdate?.Invoke(this, new LobbyEventArgs { lobby = joinedLobby });
+        }
+        catch (LobbyServiceException e)
+        {
+            Debug.Log(e);
+        }
+
         OnJoinedLobby?.Invoke(this, new LobbyEventArgs { lobby = lobby });
+
+        
     }
 
     public async void UpdatePlayerName(string playerName)
@@ -260,11 +308,7 @@ public class LobbyManager : MonoBehaviour
                 UpdatePlayerOptions options = new UpdatePlayerOptions();
 
                 options.Data = new Dictionary<string, PlayerDataObject>() {
-                    {
-                        KEY_PLAYER_NAME, new PlayerDataObject(
-                            visibility: PlayerDataObject.VisibilityOptions.Public,
-                            value: playerName)
-                    }
+                    { KEY_PLAYER_NAME, new PlayerDataObject(visibility: PlayerDataObject.VisibilityOptions.Public, value: playerName) }
                 };
 
                 string playerId = AuthenticationService.Instance.PlayerId;

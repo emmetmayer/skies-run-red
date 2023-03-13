@@ -8,9 +8,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/LobbyTutorial/LobbyTutorial_Done.unity
     guid: be8200a558cfff84b8ce074fa6e33558
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/NetworkTest.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/GameScene.unity
+    guid: c91cd6192797ff347996d61701c1359b
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 2272240ba7e43364494181a52f8df588,
       type: 2}

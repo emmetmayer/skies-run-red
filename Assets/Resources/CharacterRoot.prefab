@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5011688071016081957}
   m_Layer: 7
   m_Name: Sword
-  m_TagString: Untagged
+  m_TagString: Hitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1300,6 +1300,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 63a03a9ec8834bc44be09e462dffd8b2,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 63a03a9ec8834bc44be09e462dffd8b2, type: 3}
