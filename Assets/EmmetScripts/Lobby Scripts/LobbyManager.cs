@@ -182,6 +182,8 @@ public class LobbyManager : MonoBehaviour
             try
             {
                 string newTeam = ((joinedLobby.Players.Count - 1) % 2).ToString();
+                this.playerTeam = newTeam;
+
                 UpdatePlayerOptions playerOptions = new UpdatePlayerOptions();
 
                 playerOptions.Data = new Dictionary<string, PlayerDataObject>() {
@@ -274,6 +276,7 @@ public class LobbyManager : MonoBehaviour
         try
         {
             string newTeam = ((joinedLobby.Players.Count - 1) % 2).ToString();
+            this.playerTeam = newTeam;
             UpdatePlayerOptions options = new UpdatePlayerOptions();
 
             options.Data = new Dictionary<string, PlayerDataObject>() {
