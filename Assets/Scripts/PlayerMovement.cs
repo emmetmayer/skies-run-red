@@ -177,7 +177,7 @@ public class PlayerMovement : NetworkBehaviour
         {
             return;
         }
-        VerticalLook += delta.y * MouseSense * _mouseYFactor * Time.fixedDeltaTime;
+        VerticalLook -= delta.y * MouseSense * _mouseYFactor * Time.fixedDeltaTime;
         VerticalLook = Mathf.Clamp(VerticalLook, -4f, 4f);
         _cm3Ref.VerticalArmLength = VerticalLook;
     }
