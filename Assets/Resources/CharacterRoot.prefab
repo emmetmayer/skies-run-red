@@ -616,13 +616,13 @@ MonoBehaviour:
   _atkAnim: {fileID: 2015385076834896128}
   Gravity: 0.5
   MouseXSense: 1
-  Speed: 5
-  JumpForce: 25
+  Speed: 7
+  JumpForce: 13
   TurnSmoothVelocity: 0
   VerticalLook: 1.32
   DashDistance: 200
   DashCooldown: 0
-  DodgeDistance: 300
+  DodgeDistance: 50
   DodgeCooldown: 0
 --- !u!143 &8915163362530130712
 CharacterController:
