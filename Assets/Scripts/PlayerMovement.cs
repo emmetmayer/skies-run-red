@@ -46,7 +46,7 @@ public class PlayerMovement : NetworkBehaviour
     public float Gravity;
     public float MouseXSense = 5f;
     public float Speed = 5f;
-    public float Jump;
+    public float JumpForce;
     public float TurnSmoothVelocity;
     [Range(-4f, 4f)] public float VerticalLook = 0f;
 
@@ -94,12 +94,16 @@ public class PlayerMovement : NetworkBehaviour
         {
             HandleLook(delta);
             HandleVertLook(delta);
+            Debug.LogError(_pState);
+            Debug.LogError(_verticalVelocity);
             HandleMove(move);
         }
         else if (IsLocalPlayer)
         {
             HandleLookServerRpc(delta);
             HandleVertLook(delta);
+            Debug.LogError(_pState);
+            Debug.LogError(_verticalVelocity);
             HandleMoveServerRpc(move);
         }
         //any external mods
@@ -217,14 +221,33 @@ public class PlayerMovement : NetworkBehaviour
 
     public void OnJump()
     {
+        if (IsServer && IsLocalPlayer)
+        {
+            Jump();
+        }
+        else if (IsLocalPlayer)
+        {
+            JumpServerRpc();
+        }
+        
+    }
+
+    private void Jump()
+    {
         //set y velocity
         if (_pState == PlayerState.Grounded) _cState = ControlState.NONE;
         if (_cState == ControlState.DoubleJumped || _cState == ControlState.ControlLocked)
         {
             return;
         }
-        _verticalVelocity = Jump;
+        _verticalVelocity = JumpForce;
         if (_pState == PlayerState.Airborne) _cState = ControlState.DoubleJumped;
+    }
+
+    [ServerRpc]
+    private void JumpServerRpc()
+    {
+        Jump();
     }
     
     public void OnSlide()
@@ -238,22 +261,34 @@ public class PlayerMovement : NetworkBehaviour
     public void OnForwardDash()
     {
         //lock input? do fast movement
-        Dash(CardinalDirections.Forward);
+        OnDash(CardinalDirections.Forward);
     }
     public void OnBackwardDash()
     {
         //lock input? do fast movement
-        Dash(CardinalDirections.Backward);
+        OnDash(CardinalDirections.Backward);
     }
     public void OnLeftDash()
     {
         //lock input? do fast movement
-        Dash(CardinalDirections.Left);
+        OnDash(CardinalDirections.Left);
     }
     public void OnRightDash()
     {
         //lock input? do fast movement
-        Dash(CardinalDirections.Right);
+        OnDash(CardinalDirections.Right);
+    }
+
+    private void OnDash(CardinalDirections dir)
+    {
+        if (IsServer && IsLocalPlayer)
+        {
+            Dash(dir);
+        }
+        else if (IsLocalPlayer)
+        {
+            DashServerRpc(dir);
+        }
     }
 
     private void Dash(CardinalDirections dir)
@@ -286,22 +321,42 @@ public class PlayerMovement : NetworkBehaviour
         }
         _ccRef.Move(Time.deltaTime* moveDir * DashDistance);
     }
+
+    [ServerRpc]
+    private void DashServerRpc(CardinalDirections dir)
+    {
+        Dash(dir);
+    }
+
     public void OnForwardDodge()
     {
-        Dodge(CardinalDirections.Forward);
+        OnDodge(CardinalDirections.Forward);
     }
     public void OnBackwardDodge()
     {
-        Dodge(CardinalDirections.Backward);
+        OnDodge(CardinalDirections.Backward);
     }
     public void OnLeftDodge()
     {
-        Dodge(CardinalDirections.Left);
+        OnDodge(CardinalDirections.Left);
     }
     public void OnRightDodge()
     {
-        Dodge(CardinalDirections.Right);
+        OnDodge(CardinalDirections.Right);
     }
+
+    private void OnDodge(CardinalDirections dir)
+    {
+        if (IsServer && IsLocalPlayer)
+        {
+            Dodge(dir);
+        }
+        else if (IsLocalPlayer)
+        {
+            DodgeServerRpc(dir);
+        }
+    }
+
     private void Dodge(CardinalDirections dir)
     {
         if (Time.time - _lastDodge < DodgeCooldown)
@@ -335,6 +390,13 @@ public class PlayerMovement : NetworkBehaviour
         }
         _ccRef.Move(Time.deltaTime* moveDir * Speed * DodgeDistance); 
     }
+
+    [ServerRpc]
+    private void DodgeServerRpc(CardinalDirections dir)
+    {
+        Dodge(dir);
+    }
+
     public void OnFire()
     {
         
