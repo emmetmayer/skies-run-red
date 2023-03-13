@@ -46,18 +46,18 @@ public class PlayerMovement : NetworkBehaviour
     [SerializeField] private NetworkAnimator _naRef;
     [SerializeField] private AnimationClip _attack;
     [SerializeField] private Animation _atkAnim;
-    
-    
+
+
     [Header("Movement Specs")]
     public float Gravity;
-    public float MouseXSense = 5f;
+    public float MouseSense = 5f;
     public float Speed = 5f;
     public float JumpForce;
     public float TurnSmoothVelocity;
     [Range(-4f, 4f)] public float VerticalLook = 0f;
 
-    private float _mouseXFactor = 1f;
-    private float _mouseYFactor = .01f;
+    [SerializeField] private float _mouseXFactor = 4f;
+    [SerializeField] private float _mouseYFactor = .04f;
 
     [Header("Dash Traits")]
     public float DashDistance;
@@ -168,7 +168,7 @@ public class PlayerMovement : NetworkBehaviour
             int dir = delta.x > 0 ? 1 : -1;
 
            
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, transform.eulerAngles.y + (dir * MouseXSense * _mouseXFactor), ref TurnSmoothVelocity, 0f);
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, transform.eulerAngles.y + (dir * MouseSense * _mouseXFactor * Time.fixedDeltaTime), ref TurnSmoothVelocity, 0f);
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
         }
@@ -181,7 +181,7 @@ public class PlayerMovement : NetworkBehaviour
         {
             return;
         }
-        VerticalLook += delta.y * _mouseYFactor;
+        VerticalLook += delta.y * MouseSense * _mouseYFactor * Time.fixedDeltaTime;
         VerticalLook = Mathf.Clamp(VerticalLook, -4f, 4f);
         _cm3Ref.VerticalArmLength = VerticalLook;
     }
@@ -330,7 +330,7 @@ public class PlayerMovement : NetworkBehaviour
                 moveDir = Vector3.zero;
                 break;
         }
-        _ccRef.Move(Time.fixedDeltaTime* moveDir * DashDistance);
+        _ccRef.Move(Time.fixedDeltaTime* moveDir * Speed * DashDistance);
     }
 
     [ServerRpc]

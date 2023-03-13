@@ -615,15 +615,17 @@ MonoBehaviour:
   _attack: {fileID: 7400000, guid: 46b3d18e684bf3e4b8463a27af8624b6, type: 2}
   _atkAnim: {fileID: 2015385076834896128}
   Gravity: 0.5
-  MouseXSense: 1
+  MouseSense: 1
   Speed: 7
   JumpForce: 13
   TurnSmoothVelocity: 0
   VerticalLook: 1.32
-  DashDistance: 200
-  DashCooldown: 0
-  DodgeDistance: 50
-  DodgeCooldown: 0
+  _mouseXFactor: 250
+  _mouseYFactor: 3
+  DashDistance: 50
+  DashCooldown: 1
+  DodgeDistance: 20
+  DodgeCooldown: 1
 --- !u!143 &8915163362530130712
 CharacterController:
   m_ObjectHideFlags: 0
