@@ -82,7 +82,7 @@ public class PlayerMovement : NetworkBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     { 
         _pState = _ccRef.isGrounded ? PlayerState.Grounded : PlayerState.Airborne;
 
@@ -203,7 +203,7 @@ public class PlayerMovement : NetworkBehaviour
         //Debug.Log(_verticalVelocity);
         dir.y = _verticalVelocity;
         Debug.Log(dir);
-        _ccRef.Move(Time.deltaTime * dir);
+        _ccRef.Move(Time.fixedDeltaTime * dir);
         //_rbRef.velocity =  Speed * dir;
     }
 
@@ -319,7 +319,7 @@ public class PlayerMovement : NetworkBehaviour
                 moveDir = Vector3.zero;
                 break;
         }
-        _ccRef.Move(Time.deltaTime* moveDir * DashDistance);
+        _ccRef.Move(Time.fixedDeltaTime* moveDir * DashDistance);
     }
 
     [ServerRpc]
@@ -388,7 +388,7 @@ public class PlayerMovement : NetworkBehaviour
                 moveDir = Vector3.zero;
                 break;
         }
-        _ccRef.Move(Time.deltaTime* moveDir * Speed * DodgeDistance); 
+        _ccRef.Move(Time.fixedDeltaTime* moveDir * Speed * DodgeDistance); 
     }
 
     [ServerRpc]
