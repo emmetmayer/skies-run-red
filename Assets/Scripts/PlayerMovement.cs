@@ -45,7 +45,6 @@ public class PlayerMovement : NetworkBehaviour
     [Header("Animation Refs")]
     [SerializeField] private NetworkAnimator _naRef;
     [SerializeField] private AnimationClip _attack;
-    [SerializeField] private Animation _atkAnim;
 
 
     [Header("Movement Specs")]
@@ -87,9 +86,6 @@ public class PlayerMovement : NetworkBehaviour
         {
             _cmRef.Priority = 9;
         }
-
-        _attack.legacy = true;
-        _atkAnim.clip = _attack;
     }
 
     // Update is called once per frame
@@ -412,7 +408,8 @@ public class PlayerMovement : NetworkBehaviour
     {
         //_naRef.Animator.Play(_attack);
         Debug.Log("Animate!");
-        _atkAnim.Play();
+        _naRef.Animator.Play("SwingReal");
+        //_atkAnim.Play();
     }
     public void OnParry()
     {
