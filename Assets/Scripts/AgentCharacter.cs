@@ -53,6 +53,7 @@ public class AgentCharacter : MonoBehaviour
         {
             OnDied();
         }
+        GameObject.Find("Health").GetComponent<HealthUI>().UpdateCurrentHealth(newHealth);
         return healthChange;
     }
 

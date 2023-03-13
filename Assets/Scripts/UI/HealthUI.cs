@@ -24,6 +24,12 @@ public class HealthUI : MonoBehaviour
         }
     }
 
+    public void UpdateCurrentHealth(float n)
+    {
+        debug_currentHealth = n;
+        DoUIUpdate();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
