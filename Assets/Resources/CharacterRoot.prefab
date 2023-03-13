@@ -403,10 +403,10 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 854707622163562362}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 1bd881841f270974c8d84ee570a21739, type: 3}
+  m_Enabled: 0
+  m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 534a1e90e1a993b4da2fd536319401c6, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 2
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -522,6 +522,7 @@ GameObject:
   - component: {fileID: 8915163362530130712}
   - component: {fileID: 8295369454076659528}
   - component: {fileID: 3369451743722800544}
+  - component: {fileID: 2015385076834896128}
   m_Layer: 7
   m_Name: Character
   m_TagString: Player
@@ -610,6 +611,9 @@ MonoBehaviour:
   _ccRef: {fileID: 8915163362530130712}
   _cmRef: {fileID: 854707621095505239}
   _piRef: {fileID: 372154730981463774}
+  _naRef: {fileID: 0}
+  _attack: {fileID: 7400000, guid: 46b3d18e684bf3e4b8463a27af8624b6, type: 2}
+  _atkAnim: {fileID: 2015385076834896128}
   Gravity: 0.5
   MouseXSense: 1
   Speed: 5
@@ -677,6 +681,22 @@ MonoBehaviour:
   ScaleThreshold: 0.01
   InLocalSpace: 0
   Interpolate: 1
+--- !u!111 &2015385076834896128
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4220687950842071347}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 46b3d18e684bf3e4b8463a27af8624b6, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 46b3d18e684bf3e4b8463a27af8624b6, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &4248343018809441810
 GameObject:
   m_ObjectHideFlags: 0

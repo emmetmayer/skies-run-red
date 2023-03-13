@@ -6,6 +6,7 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.VirtualTexturing;
 using Unity.Netcode;
 using Cinemachine;
+using Unity.Netcode.Components;
 
 //might be better to just do enums for super broad states/contexts, and then do bools for other allowances
 public enum ControlState
@@ -41,7 +42,12 @@ public class PlayerMovement : NetworkBehaviour
     [SerializeField] private CinemachineVirtualCamera _cmRef;
     private Cinemachine3rdPersonFollow _cm3Ref;
     [SerializeField] private PlayerInput _piRef;
-
+    [Header("Animation Refs")]
+    [SerializeField] private NetworkAnimator _naRef;
+    [SerializeField] private AnimationClip _attack;
+    [SerializeField] private Animation _atkAnim;
+    
+    
     [Header("Movement Specs")]
     public float Gravity;
     public float MouseXSense = 5f;
@@ -63,6 +69,8 @@ public class PlayerMovement : NetworkBehaviour
     public float DodgeCooldown;
     private float _lastDodge;
     private float _verticalVelocity = 0f;
+    
+    
     // Start is called before the first frame update
     public override void OnNetworkSpawn()
     {
@@ -79,6 +87,9 @@ public class PlayerMovement : NetworkBehaviour
         {
             _cmRef.Priority = 9;
         }
+
+        _attack.legacy = true;
+        _atkAnim.clip = _attack;
     }
 
     // Update is called once per frame
@@ -399,7 +410,9 @@ public class PlayerMovement : NetworkBehaviour
 
     public void OnFire()
     {
-        
+        //_naRef.Animator.Play(_attack);
+        Debug.Log("Animate!");
+        _atkAnim.Play();
     }
     public void OnParry()
     {

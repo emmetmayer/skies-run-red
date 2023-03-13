@@ -92,6 +92,11 @@ public class AgentCharacter : MonoBehaviour
         {
             other.GetComponent<Flag>().Grab(this);
         }
+
+        if (other.CompareTag("Hitbox"))
+        {
+            ModifyHealth(-10);
+        }
     }
 
     private void OnCollisionEnter(Collision collision)

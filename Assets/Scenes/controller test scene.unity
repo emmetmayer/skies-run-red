@@ -123,6 +123,28 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &2640175 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4220687950842071347, guid: e9767b74bcadc744a8f6297e7bdc8525,
+    type: 3}
+  m_PrefabInstance: {fileID: 939163319}
+  m_PrefabAsset: {fileID: 0}
+--- !u!111 &2640183
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2640175}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 46b3d18e684bf3e4b8463a27af8624b6, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 46b3d18e684bf3e4b8463a27af8624b6, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 1
 --- !u!1 &504375403
 GameObject:
   m_ObjectHideFlags: 0
@@ -269,6 +291,32 @@ Transform:
   m_Father: {fileID: 764826983}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &749812494 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 854707622163562362, guid: e9767b74bcadc744a8f6297e7bdc8525,
+    type: 3}
+  m_PrefabInstance: {fileID: 939163319}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &749812495
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 749812494}
+  m_Enabled: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 534a1e90e1a993b4da2fd536319401c6, type: 2}
+  m_CullingMode: 2
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &764826981
 GameObject:
   m_ObjectHideFlags: 0
@@ -373,10 +421,13 @@ MonoBehaviour:
   _ccRef: {fileID: 764826984}
   _cmRef: {fileID: 0}
   _piRef: {fileID: 764826982}
+  _naRef: {fileID: 0}
+  _attack: {fileID: 0}
+  _atkAnim: {fileID: 0}
   Gravity: 4
   MouseXSense: 1
   Speed: 10
-  Jump: 80
+  JumpForce: 0
   TurnSmoothVelocity: 0
   VerticalLook: 0
   DashDistance: 200
@@ -429,6 +480,16 @@ PrefabInstance:
       propertyPath: ShoulderOffset.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 504921041924082886, guid: e9767b74bcadc744a8f6297e7bdc8525,
+        type: 3}
+      propertyPath: _attack
+      value: 
+      objectReference: {fileID: 7400000, guid: 46b3d18e684bf3e4b8463a27af8624b6, type: 2}
+    - target: {fileID: 504921041924082886, guid: e9767b74bcadc744a8f6297e7bdc8525,
+        type: 3}
+      propertyPath: _atkAnim
+      value: 
+      objectReference: {fileID: 2640183}
     - target: {fileID: 753307220739380084, guid: e9767b74bcadc744a8f6297e7bdc8525,
         type: 3}
       propertyPath: m_Layer
@@ -543,6 +604,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1485181379481853816, guid: e9767b74bcadc744a8f6297e7bdc8525,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 1282446078
       objectReference: {fileID: 0}
     - target: {fileID: 1684663806439227741, guid: e9767b74bcadc744a8f6297e7bdc8525,
         type: 3}
