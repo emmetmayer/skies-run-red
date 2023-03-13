@@ -66,8 +66,19 @@ public class PlayerMovement : NetworkBehaviour
     // Start is called before the first frame update
     public override void OnNetworkSpawn()
     {
+        _ccRef = GetComponent<CharacterController>();
+        
         Cursor.lockState = CursorLockMode.Locked;
         _cm3Ref = _cmRef.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
+        if(IsOwner)
+        {
+            _cmRef.Priority = 10;
+            _piRef.enabled = true;
+        }
+        else
+        {
+            _cmRef.Priority = 9;
+        }
     }
 
     // Update is called once per frame
@@ -82,17 +93,14 @@ public class PlayerMovement : NetworkBehaviour
         if (IsServer && IsLocalPlayer)
         {
             HandleLook(delta);
+            HandleVertLook(delta);
             HandleMove(move);
         }
         else if (IsLocalPlayer)
         {
             HandleLookServerRpc(delta);
+            HandleVertLook(delta);
             HandleMoveServerRpc(move);
-        }
-        else if(!IsSpawned)
-        {
-            HandleLook(delta);
-            HandleMove(move);
         }
         //any external mods
         
@@ -144,15 +152,23 @@ public class PlayerMovement : NetworkBehaviour
 
             int dir = delta.x > 0 ? 1 : -1;
 
-            VerticalLook += delta.y * _mouseYFactor;
-            VerticalLook = Mathf.Clamp(VerticalLook, -4f, 4f);
-            _cm3Ref.VerticalArmLength = VerticalLook;
+           
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, transform.eulerAngles.y + (dir * MouseXSense * _mouseXFactor), ref TurnSmoothVelocity, 0f);
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
-
         }
 
+    }
+
+    private void HandleVertLook(Vector2 delta)
+    {
+        if (delta.y == 0)
+        {
+            return;
+        }
+        VerticalLook += delta.y * _mouseYFactor;
+        VerticalLook = Mathf.Clamp(VerticalLook, -4f, 4f);
+        _cm3Ref.VerticalArmLength = VerticalLook;
     }
 
 
