@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.VirtualTexturing;
+using Unity.Netcode;
+using Cinemachine;
 
 //might be better to just do enums for super broad states/contexts, and then do bools for other allowances
 public enum ControlState
@@ -29,14 +31,15 @@ public enum CardinalDirections
     Left,
     Right
 }
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : NetworkBehaviour
 {
     private ControlState _cState;
     public PlayerState _pState;
 
     [Header("References to relevant components")]
     [SerializeField] private CharacterController _ccRef;
-    [SerializeField] private Rigidbody _rbRef;
+    [SerializeField] private CinemachineVirtualCamera _cmRef;
+    private Cinemachine3rdPersonFollow _cm3Ref;
     [SerializeField] private PlayerInput _piRef;
 
     [Header("Movement Specs")]
@@ -44,9 +47,12 @@ public class PlayerMovement : MonoBehaviour
     public float MouseXSense = 5f;
     public float Speed = 5f;
     public float Jump;
-    
+    public float TurnSmoothVelocity;
+    [Range(-4f, 4f)] public float VerticalLook = 0f;
+
     private float _mouseXFactor = 1f;
-    
+    private float _mouseYFactor = .01f;
+
     [Header("Dash Traits")]
     public float DashDistance;
     public float DashCooldown;
@@ -58,21 +64,36 @@ public class PlayerMovement : MonoBehaviour
     private float _lastDodge;
     private float _verticalVelocity = 0f;
     // Start is called before the first frame update
-    void Start()
+    public override void OnNetworkSpawn()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        
+        _cm3Ref = _cmRef.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
     }
 
     // Update is called once per frame
     void Update()
     { 
         _pState = _ccRef.isGrounded ? PlayerState.Grounded : PlayerState.Airborne;
-        //transform.rotation = Quaternion.Euler(0f,transform.rotation.y,0f);
-        HandleLook();
-        //default player move
-        HandleMove();
-        
+
+        var delta = Mouse.current.delta.ReadValue();
+
+        var move = _piRef.actions["Move"].ReadValue<Vector2>();
+
+        if (IsServer && IsLocalPlayer)
+        {
+            HandleLook(delta);
+            HandleMove(move);
+        }
+        else if (IsLocalPlayer)
+        {
+            HandleLookServerRpc(delta);
+            HandleMoveServerRpc(move);
+        }
+        else if(!IsSpawned)
+        {
+            HandleLook(delta);
+            HandleMove(move);
+        }
         //any external mods
         
         //send it to server
@@ -85,7 +106,7 @@ public class PlayerMovement : MonoBehaviour
     
 #region Input
 
-    private void HandleLook()
+    private void HandleLook(Vector2 delta)
     {
         
         if (Keyboard.current.enabled)
@@ -111,7 +132,7 @@ public class PlayerMovement : MonoBehaviour
                 //Debug.Log(Pointer.current.pressure.ReadValue());
                 
             }
-            var delta = Mouse.current.delta.ReadValue();
+            
             //Debug.Log(delta);
             if (delta.x == 0)
             {
@@ -123,7 +144,11 @@ public class PlayerMovement : MonoBehaviour
 
             int dir = delta.x > 0 ? 1 : -1;
 
-            transform.Rotate(new Vector3(0f, dir * MouseXSense * _mouseXFactor, 0f), Space.World);
+            VerticalLook += delta.y * _mouseYFactor;
+            VerticalLook = Mathf.Clamp(VerticalLook, -4f, 4f);
+            _cm3Ref.VerticalArmLength = VerticalLook;
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, transform.eulerAngles.y + (dir * MouseXSense * _mouseXFactor), ref TurnSmoothVelocity, 0f);
+            transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
 
         }
@@ -132,31 +157,19 @@ public class PlayerMovement : MonoBehaviour
 
 
     //it would be fine to just . call this in update actually i will do that
-    private void HandleMove()
+    private void HandleMove(Vector2 move)
     {
         //this currently only knows about keyboard
-        var move = _piRef.actions["Move"].ReadValue<Vector2>();
+        
         var dir = Vector3.zero;
-        if (move.x > 0)
-        {
-            dir += transform.right;
-        }
-        if (move.x < 0 )
-        {
-            dir -= transform.right;
-        }
-        if (move.y > 0)
-        {
-            dir += transform.forward;
-        }
-        if (move.y < 0 )
-        {
-            dir -= transform.forward;
-        }
 
+        dir += (transform.right * move.x).normalized;
+        dir += (transform.forward * move.y).normalized;
+        Debug.Log(dir);
         dir = new Vector3(dir.x, 0, dir.z);
         dir = dir.normalized;
         dir *= Speed;
+        
         //this should be couched into a grounded check probably
         if (_verticalVelocity > 0 || !_ccRef.isGrounded)
         {
@@ -165,14 +178,27 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            _verticalVelocity = 0;
+            _verticalVelocity = -_ccRef.stepOffset;
         }
         //Debug.Log(_verticalVelocity);
         dir.y = _verticalVelocity;
-        _ccRef.Move(Time.deltaTime* dir);
+        Debug.Log(dir);
+        _ccRef.Move(Time.deltaTime * dir);
         //_rbRef.velocity =  Speed * dir;
     }
-    
+
+    [ServerRpc]
+    private void HandleLookServerRpc(Vector2 delta)
+    {
+        HandleLook(delta);
+    }
+
+    [ServerRpc]
+    private void HandleMoveServerRpc(Vector2 move)
+    {
+        HandleMove(move);
+    }
+
     public void OnJump()
     {
         //set y velocity
