@@ -406,11 +406,30 @@ public class PlayerMovement : NetworkBehaviour
 
     public void OnFire()
     {
+        if (IsServer && IsLocalPlayer)
+        {
+            Fire();
+        }
+        else if (IsLocalPlayer)
+        {
+            FireServerRpc();
+        }
+        
+    }
+
+    private void Fire()
+    {
         //_naRef.Animator.Play(_attack);
-        Debug.Log("Animate!");
         _naRef.Animator.Play("SwingReal");
         //_atkAnim.Play();
     }
+
+    [ServerRpc]
+    private void FireServerRpc()
+    {
+        Fire();
+    }
+
     public void OnParry()
     {
         
