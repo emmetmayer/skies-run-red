@@ -108,8 +108,10 @@ public class TeamService : MonoBehaviour
         if (!DoSingleton()) return;
 
         m_Teams = new List<Team>();
-        CreateTeam(); // TeamID: 0
-        CreateTeam(); // TeamID: 1
+        for (int i = 0; i < CTF.Instance.TeamCount; i++)
+        {
+            CreateTeam();
+        }
 
         var allSpawnpads = Object.FindObjectsOfType<Spawnpad>();
         for (int i = 0; i < allSpawnpads.Length; i++)

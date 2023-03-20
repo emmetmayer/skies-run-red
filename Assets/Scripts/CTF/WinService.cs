@@ -6,9 +6,12 @@ public class WinService : MonoBehaviour
 {
     public static WinService Instance {get; private set;}
 
-    [Range(1, 25)]
-    [SerializeField] public int m_MaxScore = 10;
     public bool m_IsGameOver {get; private set;}
+
+    public int GetMaxScore()
+    {
+        return CTF.Instance.MaxScore;
+    }
 
     void GetWinningTeam()
     {
@@ -42,7 +45,7 @@ public class WinService : MonoBehaviour
         List<Team> allTeams = TeamService.Instance.GetAllTeams();
         for (int i = 0; i < allTeams.Count; i++)
         {
-            if (allTeams[i].m_Score >= m_MaxScore)
+            if (allTeams[i].m_Score >= CTF.Instance.MaxScore)
             {
                 m_IsGameOver = true;
                 GetWinningTeam();

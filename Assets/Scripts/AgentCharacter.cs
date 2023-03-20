@@ -10,9 +10,11 @@ public class AgentCharacter : MonoBehaviour
 
     // Character metadata
     [SerializeField] private float m_MaxHealth = 100.0f;
-    [SerializeField] public float m_Health {get; private set;}
-
+    [SerializeField] private float m_Health = 100.0f;
     [SerializeField] public Flag m_HeldFlag;
+    private bool m_IsDead = false;
+
+    public float Health { get { return m_Health; } private set { m_Health = value; } }
 
     //theres probably multiple of both of these?
     [Tooltip("When this collides with the enemy's hitbox they take damage")]
@@ -20,20 +22,27 @@ public class AgentCharacter : MonoBehaviour
     [Tooltip("When this collides with the enemy's hurtbox I take damage")]
     private List<Collider> _hitBox;
     private bool isDefending = false;
-
-    public void Start()
+    
+    public void Update()
     {
-
+        if (m_Health <= 0)
+        {
+            OnDied();
+        }
     }
 
     public void OnDied()
     {
+        if (m_IsDead) return;
+        m_IsDead = true;
+
         if (m_HeldFlag)
         {
             m_HeldFlag.Drop();
         }
+        
         // TODO: ragdoll or other death effect
-        CTFManager.Instance.StartCoroutine(m_Agent.Died());
+        StartCoroutine(m_Agent.Died());
     }
 
     //QUESTION: should we just localize all of take damage here? 

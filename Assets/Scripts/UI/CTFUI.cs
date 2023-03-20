@@ -20,7 +20,7 @@ public class CTFUI : MonoBehaviour
     {
         m_Timer.text = ConvertSToMS(GameTimer.Instance.GetTimeLeft());
 
-        int maxScore = WinService.Instance.m_MaxScore;
+        int maxScore = WinService.Instance.GetMaxScore();
         m_ScoreTeamA.text = string.Format("Team A: {0} / {1}", TeamService.Instance.GetTeam(0).m_Score, maxScore);
         m_ScoreTeamB.text = string.Format("Team B: {0} / {1}", TeamService.Instance.GetTeam(1).m_Score, maxScore);
     }
@@ -32,7 +32,7 @@ public class CTFUI : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         DoUIUpdate();
     }

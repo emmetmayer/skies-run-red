@@ -2,13 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CTFManager : MonoBehaviour
+public class CTF : MonoBehaviour
 {
-    public static CTFManager Instance {get; private set;}
+    public static CTF Instance {get; private set;}
 
-    public float GetTimeLeft()
+    public bool IsRunning = false;
+
+    [SerializeField] private float TotalGameTime = 300;
+    [SerializeField] public int MaxScore = 10;
+    [SerializeField] public int TeamCount = 2;
+
+    public void StartGame()
     {
-        return GameTimer.Instance.GetTimeLeft();
+        if (IsRunning) return;
+        IsRunning = true;
+
+        GameTimer.Instance.SetTimeLeft(TotalGameTime);
     }
 
 

@@ -1,22 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
 public class Agent
 {
-    [SerializeField] public AgentCharacter m_Character {get; private set;}
+    [SerializeField] public GameObject m_Character {get; private set;}
+    [SerializeField] public AgentCharacter m_AgentCharacter {get; private set;}
+    [SerializeField] public ulong m_ClientID {get; private set;}
     [SerializeField] public string m_Name {get; private set;}
     [SerializeField] public int m_TeamID {get; private set;}
 
     [SerializeField] public float m_RespawnTime {get; private set;} = 5.0f;
     
-    public Agent(string name, int teamID)
+    public Agent(ulong clientId, string name, int teamID)
     {
+        m_ClientID = clientId;
         m_Name = name;
         m_TeamID = teamID;
-
-        LoadCharacter();
-        TeamService.Instance.SpawnAgent(this);
     }
     
 
@@ -26,9 +27,10 @@ public class Agent
         {
             GameObject.Destroy(m_Character);
         }
-        GameObject newCharacter = GameObject.Instantiate(Resources.Load("Character", typeof(GameObject)), AgentService.Instance.m_AgentContainer) as GameObject;
-        m_Character = newCharacter.GetComponent<AgentCharacter>();
-        m_Character.New(this);
+        m_Character = GameObject.Instantiate(Resources.Load("CharacterRoot", typeof(GameObject)), AgentService.Instance.m_AgentContainer) as GameObject;
+        m_AgentCharacter = m_Character.transform.Find("Character").GetComponent<AgentCharacter>();
+        m_AgentCharacter.New(this);
+        m_Character.GetComponent<NetworkObject>().SpawnAsPlayerObject(m_ClientID);
     }
 
     public IEnumerator Died()

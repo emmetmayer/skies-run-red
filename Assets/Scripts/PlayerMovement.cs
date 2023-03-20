@@ -101,16 +101,16 @@ public class PlayerMovement : NetworkBehaviour
         {
             HandleLook(delta);
             HandleVertLook(delta);
-            Debug.LogError(_pState);
-            Debug.LogError(_verticalVelocity);
+            //Debug.LogError(_pState);
+            //Debug.LogError(_verticalVelocity);
             HandleMove(move);
         }
         else if (IsLocalPlayer)
         {
             HandleLookServerRpc(delta);
             HandleVertLook(delta);
-            Debug.LogError(_pState);
-            Debug.LogError(_verticalVelocity);
+            //Debug.LogError(_pState);
+            //Debug.LogError(_verticalVelocity);
             HandleMoveServerRpc(move);
         }
         //any external mods
@@ -192,7 +192,7 @@ public class PlayerMovement : NetworkBehaviour
 
         dir += (transform.right * move.x).normalized;
         dir += (transform.forward * move.y).normalized;
-        Debug.Log(dir);
+        //Debug.Log(dir);
         dir = new Vector3(dir.x, 0, dir.z);
         dir = dir.normalized;
         dir *= Speed;
@@ -209,7 +209,7 @@ public class PlayerMovement : NetworkBehaviour
         }
         //Debug.Log(_verticalVelocity);
         dir.y = _verticalVelocity;
-        Debug.Log(dir);
+        //Debug.Log(dir);
         _ccRef.Move(Time.fixedDeltaTime * dir);
         //_rbRef.velocity =  Speed * dir;
     }
