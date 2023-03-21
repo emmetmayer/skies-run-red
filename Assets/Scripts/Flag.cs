@@ -37,7 +37,7 @@ public class Flag : MonoBehaviour
 
     public void ScorePoints(int byTeamID)
     {
-        TeamService.Instance.GetTeam(byTeamID).AddScore(m_StoredPoints);
+        CTF.TeamService.GetTeam(byTeamID).AddScore(m_StoredPoints);
         ReturnToStand();
     }
 

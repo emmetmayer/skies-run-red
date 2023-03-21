@@ -44,11 +44,10 @@ public class RelayManager : MonoBehaviour
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
 
             NetworkManager.Singleton.ConnectionApprovalCallback += NetworkMain.ApprovalCheck;
-            
+            NetworkManager.Singleton.OnClientConnectedCallback += NetworkMain.ConnectedCallback;
+             
             NetworkManager.Singleton.StartHost();
-
             CTF.Instance.StartGame();
-            NetworkMain.AddClientAsAgent(NetworkManager.Singleton.LocalClientId);
 
             return joinCode;
         }

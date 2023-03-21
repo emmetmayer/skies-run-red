@@ -18,19 +18,17 @@ public class Team
 
     public void AddScore(float toAdd)
     {
-        if (WinService.Instance.m_IsGameOver) return;
+        if (CTF.WinService.m_IsGameOver) return;
         Assert.IsTrue(toAdd > 0);
         m_Score += toAdd;
-        WinService.Instance.IsGameOver();
+        CTF.WinService.IsGameOver();
     }
 
     public override string ToString() => $"Team {m_TeamID}";
 }
 
-public class TeamService : MonoBehaviour
+public class TeamService
 {
-    public static TeamService Instance {get; private set;}
-    
     private List<Team> m_Teams;
 
     bool DoesTeamExist(int TeamID)
@@ -89,24 +87,8 @@ public class TeamService : MonoBehaviour
     }
 
 
-    private bool DoSingleton()
+    public void OnAwake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this);
-            return false;
-        }
-        else
-        {
-            Instance = this;
-            return true;
-        }
-    }
-
-    void Awake()
-    {
-        if (!DoSingleton()) return;
-
         m_Teams = new List<Team>();
         for (int i = 0; i < CTF.Instance.TeamCount; i++)
         {

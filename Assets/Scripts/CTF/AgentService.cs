@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
-public class AgentService : MonoBehaviour
+public class AgentService
 {
-    public static AgentService Instance {get; private set;}
-
     [SerializeField] private List<Agent> m_Agents;
     public Transform m_AgentContainer {get; private set;}
 
@@ -21,24 +19,8 @@ public class AgentService : MonoBehaviour
         return newAgent;
     }
 
-    private bool DoSingleton()
+    public void OnAwake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this);
-            return false;
-        }
-        else
-        {
-            Instance = this;
-            return true;
-        }
-    }
-
-    void Awake()
-    {
-        if (!DoSingleton()) return;
-
         m_Agents = new List<Agent>();
         m_AgentContainer = (new GameObject("AgentContainer")).transform;
     }

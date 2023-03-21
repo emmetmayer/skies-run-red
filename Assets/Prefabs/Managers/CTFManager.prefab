@@ -10,10 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1937929041758091133}
   - component: {fileID: 7234748846765880359}
-  - component: {fileID: 1937929041758091135}
-  - component: {fileID: 1937929041758091134}
-  - component: {fileID: 1937929041758091130}
-  - component: {fileID: 1937929041758091131}
+  - component: {fileID: 2014614831}
+  - component: {fileID: 2014614832}
   m_Layer: 0
   m_Name: CTFManager
   m_TagString: Untagged
@@ -51,31 +49,8 @@ MonoBehaviour:
   IsRunning: 0
   TotalGameTime: 300
   MaxScore: 10
---- !u!114 &1937929041758091135
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1937929041758091121}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f55e40726594ac4aa7718028d7b5415, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1937929041758091134
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1937929041758091121}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59b1f810ffc80fa4cb3db12e7381a13c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1937929041758091130
+  TeamCount: 2
+--- !u!114 &2014614831
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -87,7 +62,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 840b33b23cbf27c4281d61bc8a31b80b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1937929041758091131
+--- !u!114 &2014614832
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -96,6 +71,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1937929041758091121}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d9af940bf772db42b645ff78f7fdf5d, type: 3}
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1

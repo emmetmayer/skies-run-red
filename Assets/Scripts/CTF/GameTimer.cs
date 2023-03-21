@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class GameTimer : MonoBehaviour
+public class GameTimer : NetworkBehaviour
 {
-    public static GameTimer Instance {get; private set;}
-    
     private float m_TimeLeft = 0;
 
     public float GetTimeLeft()
@@ -19,23 +18,10 @@ public class GameTimer : MonoBehaviour
     }
     
 
-    private bool DoSingleton()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this);
-            return false;
-        }
-        else
-        {
-            Instance = this;
-            return true;
-        }
-    }
 
-    void Awake()
+    public void OnAwake()
     {
-        if (!DoSingleton()) return;
+        
     }
     
     void Update()
@@ -45,7 +31,7 @@ public class GameTimer : MonoBehaviour
         m_TimeLeft = Mathf.Max(m_TimeLeft - Time.deltaTime, 0);
         if (m_TimeLeft <= 0)
         {
-            WinService.Instance.IsGameOver();
+            CTF.WinService.IsGameOver();
         }
     }
 }

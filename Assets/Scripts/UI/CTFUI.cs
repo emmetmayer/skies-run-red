@@ -18,11 +18,11 @@ public class CTFUI : MonoBehaviour
 
     void DoUIUpdate()
     {
-        m_Timer.text = ConvertSToMS(GameTimer.Instance.GetTimeLeft());
+        m_Timer.text = ConvertSToMS(CTF.GameTimer.GetTimeLeft());
 
-        int maxScore = WinService.Instance.GetMaxScore();
-        m_ScoreTeamA.text = string.Format("Team A: {0} / {1}", TeamService.Instance.GetTeam(0).m_Score, maxScore);
-        m_ScoreTeamB.text = string.Format("Team B: {0} / {1}", TeamService.Instance.GetTeam(1).m_Score, maxScore);
+        int maxScore = CTF.WinService.GetMaxScore();
+        m_ScoreTeamA.text = string.Format("Team A: {0} / {1}", CTF.TeamService.GetTeam(0).m_Score, maxScore);
+        m_ScoreTeamB.text = string.Format("Team B: {0} / {1}", CTF.TeamService.GetTeam(1).m_Score, maxScore);
     }
 
     // Start is called before the first frame update
