@@ -1,10 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class CTF : MonoBehaviour
+public class CTF : NetworkBehaviour
 {
     public static CTF Instance {get; private set;}
+
+    public static TeamService TeamService {get; private set;}
+    public static AgentService AgentService {get; private set;}
+    public static WinService WinService {get; private set;}
+    public static GameTimer GameTimer {get; private set;}
 
     public bool IsRunning = false;
 
@@ -17,7 +23,7 @@ public class CTF : MonoBehaviour
         if (IsRunning) return;
         IsRunning = true;
 
-        GameTimer.Instance.SetTimeLeft(TotalGameTime);
+        CTF.GameTimer.SetTimeLeft(TotalGameTime);
     }
 
 
@@ -31,6 +37,19 @@ public class CTF : MonoBehaviour
         else
         {
             Instance = this;
+
+            TeamService = new TeamService();
+            TeamService.OnAwake();
+
+            AgentService = new AgentService();
+            AgentService.OnAwake();
+
+            WinService = new WinService();
+            WinService.OnAwake();
+
+            GameTimer = this.GetComponent<GameTimer>();
+            GameTimer.OnAwake();
+
             return true;
         }
     }

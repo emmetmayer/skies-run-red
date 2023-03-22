@@ -27,7 +27,8 @@ public class Agent
         {
             GameObject.Destroy(m_Character);
         }
-        m_Character = GameObject.Instantiate(Resources.Load("CharacterRoot", typeof(GameObject)), AgentService.Instance.m_AgentContainer) as GameObject;
+
+        m_Character = GameObject.Instantiate(Resources.Load("CharacterRoot", typeof(GameObject)), CTF.AgentService.m_AgentContainer) as GameObject;
         m_AgentCharacter = m_Character.transform.Find("Character").GetComponent<AgentCharacter>();
         m_AgentCharacter.New(this);
         m_Character.GetComponent<NetworkObject>().SpawnAsPlayerObject(m_ClientID);

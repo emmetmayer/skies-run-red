@@ -2,10 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WinService : MonoBehaviour
+public class WinService
 {
-    public static WinService Instance {get; private set;}
-
     public bool m_IsGameOver {get; private set;}
 
     public int GetMaxScore()
@@ -18,7 +16,7 @@ public class WinService : MonoBehaviour
         float highestScore = 0;
         int winningTeamID = -1;
 
-        List<Team> allTeams = TeamService.Instance.GetAllTeams();
+        List<Team> allTeams = CTF.TeamService.GetAllTeams();
         for (int i = 0; i < allTeams.Count; i++)
         {
             if (allTeams[i].m_Score >= highestScore)
@@ -42,7 +40,7 @@ public class WinService : MonoBehaviour
     {
         if (m_IsGameOver) return true;
 
-        List<Team> allTeams = TeamService.Instance.GetAllTeams();
+        List<Team> allTeams = CTF.TeamService.GetAllTeams();
         for (int i = 0; i < allTeams.Count; i++)
         {
             if (allTeams[i].m_Score >= CTF.Instance.MaxScore)
@@ -53,7 +51,7 @@ public class WinService : MonoBehaviour
             }
         }
 
-        if (GameTimer.Instance.GetTimeLeft() <= 0)
+        if (CTF.GameTimer.GetTimeLeft() <= 0)
         {
             m_IsGameOver = true;
             GetWinningTeam();
@@ -64,22 +62,8 @@ public class WinService : MonoBehaviour
     }
     
 
-    private bool DoSingleton()
+    public void OnAwake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this);
-            return false;
-        }
-        else
-        {
-            Instance = this;
-            return true;
-        }
-    }
-
-    void Awake()
-    {
-        if (!DoSingleton()) return;
+        
     }
 }
