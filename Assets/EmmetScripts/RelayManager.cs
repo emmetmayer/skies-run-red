@@ -9,6 +9,7 @@ using Unity.Services.Core;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using UnityEngine;
+using Unity.Netcode;
 
 public class RelayManager : MonoBehaviour
 {
@@ -45,9 +46,17 @@ public class RelayManager : MonoBehaviour
 
             NetworkManager.Singleton.ConnectionApprovalCallback += NetworkMain.ApprovalCheck;
             NetworkManager.Singleton.OnClientConnectedCallback += NetworkMain.ConnectedCallback;
-             
+            
             NetworkManager.Singleton.StartHost();
-            CTF.Instance.StartGame();
+
+            if (NetworkManager.Singleton.IsServer)
+            {
+                CTF.Instance.StartGame();
+            }
+            else
+            {
+                CTF.Instance.StartGameServerRPC();
+            }
 
             return joinCode;
         }

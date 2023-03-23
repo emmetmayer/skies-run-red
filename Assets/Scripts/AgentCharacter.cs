@@ -2,8 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class AgentCharacter : MonoBehaviour
+public class AgentCharacter : NetworkBehaviour
 {
     // Abstract agent reference
     [SerializeField] public Agent m_Agent {get; private set;}
@@ -14,6 +15,7 @@ public class AgentCharacter : MonoBehaviour
     [SerializeField] public Flag m_HeldFlag;
     private bool m_IsDead = false;
 
+    public float MaxHealth { get { return m_MaxHealth; } private set { m_MaxHealth = value; } }
     public float Health { get { return m_Health; } private set { m_Health = value; } }
 
     //theres probably multiple of both of these?
@@ -27,7 +29,7 @@ public class AgentCharacter : MonoBehaviour
     {
         if (m_Health <= 0)
         {
-            OnDied();
+            OnDied(); // TODO: REMOVE LATER
         }
     }
 
@@ -62,7 +64,7 @@ public class AgentCharacter : MonoBehaviour
         {
             OnDied();
         }
-        GameObject.Find("Health").GetComponent<HealthUI>().UpdateCurrentHealth(newHealth);
+        
         return healthChange;
     }
 
@@ -76,6 +78,8 @@ public class AgentCharacter : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!IsOwner) return;
+        
         if (other.tag == "FlagStand")
         {
             FlagStand flagStand = other.GetComponent<FlagStand>();
@@ -93,14 +97,16 @@ public class AgentCharacter : MonoBehaviour
                 Transform flagObject = other.transform.Find("Flag");
                 if (flagObject)
                 {
-                    flagObject.GetComponent<Flag>().Grab(this);
+                    ulong networkObjectId = this.GetComponent<NetworkObject>().NetworkObjectId;
+                    flagObject.GetComponent<Flag>().GrabServerRpc(networkObjectId);
                 }
             }
         }
 
         if (other.tag == "Flag")
         {
-            other.GetComponent<Flag>().Grab(this);
+            ulong networkObjectId = this.GetComponent<NetworkObject>().NetworkObjectId;
+            other.GetComponent<Flag>().GrabServerRpc(networkObjectId);
         }
 
         if (other.CompareTag("Hitbox"))
@@ -111,6 +117,8 @@ public class AgentCharacter : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (!IsOwner) return;
+        
         bool hit = collision.collider.CompareTag("Hitbox");
         
         //throw new NotImplementedException();)

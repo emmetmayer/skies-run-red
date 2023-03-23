@@ -1,39 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
 public class CTFUI : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI m_Timer;
-    [SerializeField] TextMeshProUGUI m_ScoreTeamA;
-    [SerializeField] TextMeshProUGUI m_ScoreTeamB;
-
-    string ConvertSToMS(float time)
-    {
-        float seconds = Mathf.Floor(time % 60f);
-        float minutes = Mathf.Floor(time / 60f);
-        return string.Format("{0}:{1:00}", minutes, seconds);
-    }
-
-    void DoUIUpdate()
-    {
-        m_Timer.text = ConvertSToMS(CTF.GameTimer.GetTimeLeft());
-
-        int maxScore = CTF.WinService.GetMaxScore();
-        m_ScoreTeamA.text = string.Format("Team A: {0} / {1}", CTF.TeamService.GetTeam(0).m_Score, maxScore);
-        m_ScoreTeamB.text = string.Format("Team B: {0} / {1}", CTF.TeamService.GetTeam(1).m_Score, maxScore);
-    }
-
-    // Start is called before the first frame update
+    [SerializeField] GameObject m_CTFUI;
+    
     void Start()
     {
-        DoUIUpdate();
-    }
-
-    // Update is called once per frame
-    void LateUpdate()
-    {
-        DoUIUpdate();
+        m_CTFUI.SetActive(CTF.Instance.IsRunning.Value);
+        CTF.Instance.IsRunning.OnValueChanged += (bool previous, bool current) => {
+            m_CTFUI.SetActive(CTF.Instance.IsRunning.Value);
+        };
     }
 }

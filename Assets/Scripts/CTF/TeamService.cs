@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
+using Unity.Netcode;
 
 public class Team
 {
@@ -21,15 +22,43 @@ public class Team
         if (CTF.WinService.m_IsGameOver) return;
         Assert.IsTrue(toAdd > 0);
         m_Score += toAdd;
+        CTF.TeamService.UpdateScoreClientRpc(m_TeamID, m_Score);
         CTF.WinService.IsGameOver();
     }
 
     public override string ToString() => $"Team {m_TeamID}";
 }
 
-public class TeamService
+public class TeamService : NetworkBehaviour
 {
     private List<Team> m_Teams;
+    
+    [ServerRpc]
+    public void AddScoreServerRpc(int teamID, float addScore)
+    {
+        this.GetTeam(teamID).AddScore(addScore);
+    }
+    
+    [ServerRpc]
+    public void GetScoreServerRpc(int teamID)
+    {
+        float score = 0;
+        if (DoesTeamExist(teamID))
+        {
+            score = m_Teams[teamID].m_Score;
+        }
+        CTF.TeamService.UpdateScoreClientRpc(teamID, score);
+    }
+
+    [ClientRpc]
+    public void UpdateScoreClientRpc(int teamID, float score)
+    {
+        if (GameCondUI.Instance != null)
+        {
+            GameCondUI.Instance.UpdateScore(teamID, score);
+        }
+    }
+
 
     bool DoesTeamExist(int TeamID)
     {
