@@ -22,12 +22,29 @@ public static class NetworkMain
         response.Pending = false;
     }
 
+    public static void SpawnPlayerAgent(ulong clientId)
+    {
+        Agent agent = CTF.AgentService.AddAgent(clientId, "PLAYER_1");
+        CTF.TeamService.SpawnAgent(agent);
+    }
+
     public static void ConnectedCallback(ulong clientId)
     {
         if (NetworkManager.Singleton.IsServer)
         {
-            Agent agent = CTF.AgentService.AddAgent(clientId, "PLAYER_1");
-            CTF.TeamService.SpawnAgent(agent);
+            if (CTF.Instance.IsRunning.Value)
+            {
+                SpawnPlayerAgent(clientId);
+            }
+            else
+            {
+                CTF.Instance.IsRunning.OnValueChanged += (bool previous, bool current) => {
+                    if (!previous && current)
+                    {
+                        SpawnPlayerAgent(clientId);
+                    }
+                };
+            }
         }
     }
 }

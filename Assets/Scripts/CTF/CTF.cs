@@ -12,20 +12,35 @@ public class CTF : NetworkBehaviour
     public static WinService WinService {get; private set;}
     public static GameTimer GameTimer {get; private set;}
 
-    public bool IsRunning = false;
+    public NetworkVariable<bool> IsRunning = new NetworkVariable<bool>(false);
 
     [SerializeField] private float TotalGameTime = 300;
     [SerializeField] public int MaxScore = 10;
     [SerializeField] public int TeamCount = 2;
 
+    private bool isStarting = false;
     public void StartGame()
     {
-        if (IsRunning) return;
-        IsRunning = true;
+        if (!IsServer) return;
+        if (IsRunning.Value) return;
+        if (isStarting) return;
+        isStarting = true;
+        
+        TeamService.OnAwake();
+        AgentService.OnAwake();
+        WinService.OnAwake();
+        GameTimer.OnAwake();
 
         CTF.GameTimer.SetTimeLeft(TotalGameTime);
+        
+        IsRunning.Value = true;
     }
 
+    [ServerRpc]
+    public void StartGameServerRPC()
+    {
+        StartGame();
+    }
 
     private bool DoSingleton()
     {
@@ -38,17 +53,10 @@ public class CTF : NetworkBehaviour
         {
             Instance = this;
 
-            TeamService = new TeamService();
-            TeamService.OnAwake();
-
-            AgentService = new AgentService();
-            AgentService.OnAwake();
-
-            WinService = new WinService();
-            WinService.OnAwake();
-
+            TeamService = this.GetComponent<TeamService>();
+            AgentService = this.GetComponent<AgentService>();
+            WinService = this.GetComponent<WinService>();
             GameTimer = this.GetComponent<GameTimer>();
-            GameTimer.OnAwake();
 
             return true;
         }
@@ -56,6 +64,6 @@ public class CTF : NetworkBehaviour
 
     void Awake()
     {
-        if (!DoSingleton()) return;
+        DoSingleton();
     }
 }

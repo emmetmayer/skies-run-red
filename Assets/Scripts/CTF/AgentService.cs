@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
-public class AgentService
+public class AgentService : NetworkBehaviour
 {
     [SerializeField] private List<Agent> m_Agents;
     public Transform m_AgentContainer {get; private set;}

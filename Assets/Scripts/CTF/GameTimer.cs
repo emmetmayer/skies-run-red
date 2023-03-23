@@ -5,16 +5,18 @@ using Unity.Netcode;
 
 public class GameTimer : NetworkBehaviour
 {
-    private float m_TimeLeft = 0;
+    private float m_TimeLeftFloat = 0;
+    public NetworkVariable<int> m_TimeLeft = new NetworkVariable<int>(0);
 
     public float GetTimeLeft()
     {
-        return m_TimeLeft;
+        return m_TimeLeft.Value;
     }
 
     public void SetTimeLeft(float seconds)
     {
-        m_TimeLeft = seconds;
+        m_TimeLeftFloat = seconds;
+        m_TimeLeft.Value = (int)Mathf.Ceil(seconds);
     }
     
 
@@ -26,10 +28,15 @@ public class GameTimer : NetworkBehaviour
     
     void Update()
     {
-        if (!CTF.Instance.IsRunning) return;
+        if (!IsServer) return;
+        if (!CTF.Instance.IsRunning.Value) return;
 
-        m_TimeLeft = Mathf.Max(m_TimeLeft - Time.deltaTime, 0);
-        if (m_TimeLeft <= 0)
+        m_TimeLeftFloat = Mathf.Max(m_TimeLeftFloat - Time.deltaTime, 0);
+
+        int newTimeLeftInt = (int)Mathf.Ceil(m_TimeLeftFloat);
+        if (newTimeLeftInt != m_TimeLeft.Value) m_TimeLeft.Value = newTimeLeftInt;
+
+        if (m_TimeLeftFloat <= 0)
         {
             CTF.WinService.IsGameOver();
         }

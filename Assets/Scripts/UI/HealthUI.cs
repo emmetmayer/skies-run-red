@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
 public class HealthUI : MonoBehaviour
 {
@@ -8,39 +9,49 @@ public class HealthUI : MonoBehaviour
     private float m_MaxWidth;
     private float m_LastHealth;
 
-    [Range(0, 100)]
-    [SerializeField] float debug_currentHealth = 50.0f;
-    [SerializeField] float debug_maxHealth = 100.0f;
+    // TEMP CHAR TRACKING
+    NetworkObject playerObject;
+    AgentCharacter agentCharacter;
+    
 
     void DoUIUpdate()
     {
-        //float currentHealth = 50.0f; // TODO: Get local player health
-        if (debug_currentHealth != m_LastHealth)
+        if (agentCharacter && agentCharacter.Health != m_LastHealth)
         {
-            //float maxHealth = 100.0f; // TODO: Get local player health
-            m_LastHealth = debug_currentHealth;
-            float newWidth = Mathf.Clamp((debug_currentHealth / debug_maxHealth) * m_MaxWidth, 0f, m_MaxWidth);
+            m_LastHealth = agentCharacter.Health;
+            float newWidth = Mathf.Clamp((agentCharacter.Health / agentCharacter.MaxHealth) * m_MaxWidth, 0f, m_MaxWidth);
             m_HealthBar.sizeDelta = new Vector2(newWidth, m_HealthBar.rect.height);
         }
     }
+    
 
-    public void UpdateCurrentHealth(float n)
+    void UpdatePlayerRef()
     {
-        debug_currentHealth = n;
-        DoUIUpdate();
+        if (NetworkManager.Singleton == null || NetworkManager.Singleton.LocalClient == null) return;
+        NetworkObject currentPlayerObject = NetworkManager.Singleton.LocalClient.PlayerObject;
+        if (currentPlayerObject != playerObject)
+        {
+            playerObject = currentPlayerObject;
+            if (playerObject != null)
+            {
+                agentCharacter = playerObject.GetComponent<AgentCharacter>();
+                m_LastHealth = agentCharacter.MaxHealth;
+            }
+        }
     }
 
-    // Start is called before the first frame update
     void Start()
     {
+        UpdatePlayerRef();
+
         m_MaxWidth = m_HealthBar.rect.width;
-        m_LastHealth = debug_maxHealth; // TODO: Get local player health
+
         DoUIUpdate();
     }
 
-    // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
+        UpdatePlayerRef();
         DoUIUpdate();
     }
 }

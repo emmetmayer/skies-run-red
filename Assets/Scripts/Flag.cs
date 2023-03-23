@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class Flag : MonoBehaviour
+public class Flag : NetworkBehaviour
 {
     // Holder metadata
     [SerializeField] private AgentCharacter m_CurrentHolder;
+    [SerializeField] private Transform m_HoldingObject;
     [SerializeField] private Vector3 m_FlagOffset;
 
     private Transform m_Stand;
@@ -27,7 +29,8 @@ public class Flag : MonoBehaviour
             m_CurrentHolder = null;
         }
 
-        this.transform.SetParent(m_Stand);
+        //this.transform.SetParent(m_Stand);
+        m_HoldingObject = m_Stand;
         this.transform.position = m_StandOffset;
         this.transform.rotation = m_OriginalRot;
 
@@ -37,12 +40,13 @@ public class Flag : MonoBehaviour
 
     public void ScorePoints(int byTeamID)
     {
-        CTF.TeamService.GetTeam(byTeamID).AddScore(m_StoredPoints);
+        CTF.TeamService.AddScoreServerRpc(byTeamID, m_StoredPoints);
         ReturnToStand();
     }
 
     public void Grab(AgentCharacter agentChar)
     {
+        if (!IsServer) return;
         if (m_CurrentHolder) return;
         if (agentChar.m_HeldFlag) return;
 
@@ -55,7 +59,8 @@ public class Flag : MonoBehaviour
             this.transform.position = agentChar.transform.position + m_FlagOffset;
             Vector3 ea = agentChar.transform.rotation.eulerAngles;
             this.transform.rotation = Quaternion.Euler(ea.x, ea.y + 90, ea.z + 90);
-            this.transform.SetParent(agentChar.transform);
+            m_HoldingObject = agentChar.transform;
+            //this.transform.SetParent(agentChar.transform);
 
             m_IsOnStand = false;
         }
@@ -63,7 +68,14 @@ public class Flag : MonoBehaviour
         {
             ReturnToStand();
         }
-        
+    }
+
+    [ServerRpc]
+    public void GrabServerRpc(ulong networkObjectId)
+    {
+        NetworkObject agentCharObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[networkObjectId];
+        AgentCharacter agentChar = agentCharObject.GetComponent<AgentCharacter>();
+        Grab(agentChar);
     }
 
     public void Throw()
@@ -81,24 +93,33 @@ public class Flag : MonoBehaviour
         m_CurrentHolder.m_HeldFlag = null;
         m_CurrentHolder = null;
 
-        this.transform.parent = null;
+        //this.transform.parent = null;
+        //m_HoldingObject = null;
         this.transform.position -= m_FlagOffset;
     }
     
 
     void Awake()
     {
+        if (!IsServer) return;
+
         m_Stand = this.transform.parent;
-        m_StandOffset = this.transform.position;
-        m_OriginalRot = this.transform.rotation;
-        m_IsOnStand = true;
+
+        ReturnToStand();
     }
 
     void Update()
     {
+        if (!IsServer) return;
+
         if (m_CurrentHolder)
         {
             m_CurrentHoldTime += Time.deltaTime;
+        }
+
+        if (m_HoldingObject != null)
+        {
+            this.transform.position = m_HoldingObject.position;
         }
     }
 }
