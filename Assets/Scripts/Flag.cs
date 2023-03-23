@@ -70,7 +70,7 @@ public class Flag : NetworkBehaviour
         }
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     public void GrabServerRpc(ulong networkObjectId)
     {
         NetworkObject agentCharObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[networkObjectId];

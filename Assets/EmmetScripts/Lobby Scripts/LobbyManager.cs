@@ -53,6 +53,18 @@ public class LobbyManager : MonoBehaviour
 
     public async void Authenticate(string playerName)
     {
+        // ParrelSync should only be used within the Unity Editor so you should use the UNITY_EDITOR define
+        #if UNITY_EDITOR
+        if (ParrelSync.ClonesManager.IsClone())
+        {
+            await UnityServices.InitializeAsync();
+            // When using a ParrelSync clone, switch to a different authentication profile to force the clone
+            // to sign in as a different anonymous user account.
+            string customArgument = ParrelSync.ClonesManager.GetArgument();
+            AuthenticationService.Instance.SwitchProfile($"Clone_{customArgument}_Profile");
+        }
+        #endif
+
         this.playerName = playerName;
         InitializationOptions initializationOptions = new InitializationOptions();
         initializationOptions.SetProfile(playerName);
@@ -101,7 +113,7 @@ public class LobbyManager : MonoBehaviour
 
     private async void HandleLobbyPolling()
     {
-        if (joinedLobby != null)
+        if (joinedLobby != null && !RelayManager.Instance.m_HasStartedConnection)
         {
             lobbyPollTimer -= Time.deltaTime;
             if (lobbyPollTimer < 0f)
@@ -349,7 +361,7 @@ public class LobbyManager : MonoBehaviour
 
     public async void StartGame()
     {
-        if (IsLobbyHost())
+        if (IsLobbyHost() && !RelayManager.Instance.m_HasStartedConnection)
         {
             try
             {
@@ -366,6 +378,7 @@ public class LobbyManager : MonoBehaviour
                 });
 
                 joinedLobby = lobby;
+                OnGameStarted?.Invoke(this, EventArgs.Empty);
             }
             catch (LobbyServiceException e)
             {

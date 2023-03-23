@@ -330,8 +330,10 @@ GameObject:
   - component: {fileID: 216917736}
   - component: {fileID: 216917735}
   - component: {fileID: 216917734}
-  - component: {fileID: 216917738}
   - component: {fileID: 216917739}
+  - component: {fileID: 216917738}
+  - component: {fileID: 216917741}
+  - component: {fileID: 216917740}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -450,6 +452,34 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &216917740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 216917733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2db0614302bdf7f429b68819f26de999, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Timer: {fileID: 604615790}
+  m_ScoreTeamA: {fileID: 1263738706}
+  m_ScoreTeamB: {fileID: 1517809378}
+--- !u!114 &216917741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 216917733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5d88e7ea98f97c41aed427ffd025a69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HealthBar: {fileID: 868982722}
 --- !u!1 &260251568
 GameObject:
   m_ObjectHideFlags: 0
@@ -1239,7 +1269,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -163, y: 0}
-  m_SizeDelta: {x: 400, y: 70}
+  m_SizeDelta: {x: 326, y: 70}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &868982723
 MonoBehaviour:
@@ -2545,7 +2575,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 28c7ce0a1948e3143908e601ef95935b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1c3dd4ea7554b4d45b57d97b5ca2b0e6, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2707,8 +2737,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1647715526}
-  - component: {fileID: 1647715528}
-  - component: {fileID: 1647715527}
   m_Layer: 5
   m_Name: CTF
   m_TagString: Untagged
@@ -2738,34 +2766,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1647715527
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1647715525}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5d88e7ea98f97c41aed427ffd025a69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HealthBar: {fileID: 868982722}
---- !u!114 &1647715528
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1647715525}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2db0614302bdf7f429b68819f26de999, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Timer: {fileID: 604615790}
-  m_ScoreTeamA: {fileID: 1263738706}
-  m_ScoreTeamB: {fileID: 1517809378}
 --- !u!1001 &1703843185
 PrefabInstance:
   m_ObjectHideFlags: 0

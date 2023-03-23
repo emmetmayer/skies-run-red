@@ -12,7 +12,8 @@ public class CTF : NetworkBehaviour
     public static WinService WinService {get; private set;}
     public static GameTimer GameTimer {get; private set;}
 
-    public NetworkVariable<bool> IsRunning = new NetworkVariable<bool>(false);
+    public NetworkVariable<bool> IsRunning = new NetworkVariable<bool>(false,
+        NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     [SerializeField] private float TotalGameTime = 300;
     [SerializeField] public int MaxScore = 10;

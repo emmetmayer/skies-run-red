@@ -33,13 +33,13 @@ public class TeamService : NetworkBehaviour
 {
     private List<Team> m_Teams;
     
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     public void AddScoreServerRpc(int teamID, float addScore)
     {
         this.GetTeam(teamID).AddScore(addScore);
     }
     
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     public void GetScoreServerRpc(int teamID)
     {
         float score = 0;
@@ -62,7 +62,7 @@ public class TeamService : NetworkBehaviour
 
     bool DoesTeamExist(int TeamID)
     {
-        return TeamID >= 0 && TeamID < m_Teams.Count;
+        return m_Teams != null && TeamID >= 0 && TeamID < m_Teams.Count;
     }
 
     int CreateTeam()

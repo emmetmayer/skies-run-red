@@ -25,18 +25,12 @@ public class AgentCharacter : NetworkBehaviour
     private List<Collider> _hitBox;
     private bool isDefending = false;
     
-    public void Update()
-    {
-        if (m_Health <= 0)
-        {
-            OnDied(); // TODO: REMOVE LATER
-        }
-    }
-
     public void OnDied()
     {
         if (m_IsDead) return;
         m_IsDead = true;
+
+        GetComponent<PlayerMovement>().enabled = false;
 
         if (m_HeldFlag)
         {
@@ -60,7 +54,7 @@ public class AgentCharacter : NetworkBehaviour
         m_Health = Mathf.Clamp(newHealth, 0, m_MaxHealth);
         float healthChange = Mathf.Abs(newHealth - m_Health);
 
-        if (healthChange > 0 && m_Health < 0)
+        if (healthChange > 0 && m_Health <= 0)
         {
             OnDied();
         }

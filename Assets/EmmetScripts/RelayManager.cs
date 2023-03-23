@@ -15,27 +15,24 @@ public class RelayManager : MonoBehaviour
 {
     public static RelayManager Instance { get; private set; }
 
+    public bool m_HasStartedConnection = false;
+
+
     private void Awake()
     {
         Instance = this;
-    }
-
-    // Start is called before the first frame update
-    private async void Start()
-    {
-        await UnityServices.InitializeAsync();
-
-        AuthenticationService.Instance.SignedIn += () =>
-        {
-            Debug.Log("Signed in " + AuthenticationService.Instance.PlayerId);
-        };
-        //await AuthenticationService.Instance.SignInAnonymouslyAsync();
     }
 
     public async Task<string> CreateRelay(int players)
     {
         try
         {
+            if (m_HasStartedConnection)
+            {
+                throw new System.Exception("Cannot create relay; connection already started!");
+            }
+            m_HasStartedConnection = true;
+
             Allocation allocation = await RelayService.Instance.CreateAllocationAsync(players - 1);
 
             string joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
@@ -71,6 +68,12 @@ public class RelayManager : MonoBehaviour
     {
         try
         {
+            if (m_HasStartedConnection)
+            {
+                throw new System.Exception("Cannot join relay; connection already started!");
+            }
+            m_HasStartedConnection = true;
+
             JoinAllocation joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
 
             RelayServerData relayServerData = new RelayServerData(joinAllocation, "dtls");

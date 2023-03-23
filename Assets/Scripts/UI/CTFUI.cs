@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class CTFUI : MonoBehaviour
+public class CTFUI : NetworkBehaviour
 {
     [SerializeField] GameObject m_CTFUI;
     
-    void Start()
+    public override void OnNetworkSpawn()
     {
         m_CTFUI.SetActive(CTF.Instance.IsRunning.Value);
         CTF.Instance.IsRunning.OnValueChanged += (bool previous, bool current) => {

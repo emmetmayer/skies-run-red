@@ -83,10 +83,14 @@ public class LobbyUI : MonoBehaviour {
                 playerSingleTransform = Instantiate(playerSingleTemplate2, container2);
             }
 
-            playerSingleTransform.gameObject.SetActive(true);
-            LobbyPlayerSingleUI lobbyPlayerSingleUI = playerSingleTransform.GetComponent<LobbyPlayerSingleUI>();
+            if (playerSingleTransform != null)
+            {
+                playerSingleTransform.gameObject.SetActive(true);
+                LobbyPlayerSingleUI lobbyPlayerSingleUI = playerSingleTransform.GetComponent<LobbyPlayerSingleUI>();
 
-            lobbyPlayerSingleUI.UpdatePlayer(player);
+                lobbyPlayerSingleUI.UpdatePlayer(player);
+            }
+            
         }
 
         lobbyNameText.text = lobby.Name;

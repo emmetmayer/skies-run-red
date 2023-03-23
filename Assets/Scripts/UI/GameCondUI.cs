@@ -4,7 +4,7 @@ using UnityEngine;
 using Unity.Netcode;
 using TMPro;
 
-public class GameCondUI : MonoBehaviour
+public class GameCondUI : NetworkBehaviour
 {
     public static GameCondUI Instance;
 
@@ -35,11 +35,9 @@ public class GameCondUI : MonoBehaviour
                 break;
         }
     }
-
     
-
-    // Start is called before the first frame update
-    void Start()
+    
+    public override void OnNetworkSpawn()
     {
         Instance = this;
         

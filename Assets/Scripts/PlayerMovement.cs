@@ -73,18 +73,13 @@ public class PlayerMovement : NetworkBehaviour
     // Start is called before the first frame update
     public override void OnNetworkSpawn()
     {
-        _ccRef = GetComponent<CharacterController>();
-        
-        Cursor.lockState = CursorLockMode.Locked;
-        _cm3Ref = _cmRef.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
         if(IsOwner)
         {
-            _cmRef.Priority = 10;
+            _cmRef.gameObject.SetActive(true);
+            _cm3Ref = _cmRef.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
             _piRef.enabled = true;
-        }
-        else
-        {
-            _cmRef.Priority = 9;
+            _ccRef = GetComponent<CharacterController>();
+            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 
@@ -97,7 +92,7 @@ public class PlayerMovement : NetworkBehaviour
 
         var move = _piRef.actions["Move"].ReadValue<Vector2>();
 
-        if (IsServer && IsLocalPlayer)
+        if (/*IsServer && */IsLocalPlayer)
         {
             HandleLook(delta);
             HandleVertLook(delta);
@@ -105,14 +100,14 @@ public class PlayerMovement : NetworkBehaviour
             //Debug.LogError(_verticalVelocity);
             HandleMove(move);
         }
-        else if (IsLocalPlayer)
+        /*else if (IsLocalPlayer)
         {
             HandleLookServerRpc(delta);
             HandleVertLook(delta);
             //Debug.LogError(_pState);
             //Debug.LogError(_verticalVelocity);
             HandleMoveServerRpc(move);
-        }
+        }*/
         //any external mods
         
         //send it to server
@@ -228,14 +223,14 @@ public class PlayerMovement : NetworkBehaviour
 
     public void OnJump()
     {
-        if (IsServer && IsLocalPlayer)
+        if (/*IsServer && */IsLocalPlayer)
         {
             Jump();
         }
-        else if (IsLocalPlayer)
+        /*else if (IsLocalPlayer)
         {
             JumpServerRpc();
-        }
+        }*/
         
     }
 
@@ -288,14 +283,14 @@ public class PlayerMovement : NetworkBehaviour
 
     private void OnDash(CardinalDirections dir)
     {
-        if (IsServer && IsLocalPlayer)
+        if (/*IsServer && */IsLocalPlayer)
         {
             Dash(dir);
         }
-        else if (IsLocalPlayer)
+        /*else if (IsLocalPlayer)
         {
             DashServerRpc(dir);
-        }
+        }*/
     }
 
     private void Dash(CardinalDirections dir)
@@ -354,14 +349,14 @@ public class PlayerMovement : NetworkBehaviour
 
     private void OnDodge(CardinalDirections dir)
     {
-        if (IsServer && IsLocalPlayer)
+        if (/*IsServer && */IsLocalPlayer)
         {
             Dodge(dir);
         }
-        else if (IsLocalPlayer)
+        /*else if (IsLocalPlayer)
         {
             DodgeServerRpc(dir);
-        }
+        }*/
     }
 
     private void Dodge(CardinalDirections dir)
@@ -406,14 +401,14 @@ public class PlayerMovement : NetworkBehaviour
 
     public void OnFire()
     {
-        if (IsServer && IsLocalPlayer)
+        if (/*IsServer && */IsLocalPlayer)
         {
             Fire();
         }
-        else if (IsLocalPlayer)
+        /*else if (IsLocalPlayer)
         {
             FireServerRpc();
-        }
+        }*/
         
     }
 
