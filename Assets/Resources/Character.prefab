@@ -126,10 +126,12 @@ MonoBehaviour:
   VerticalLook: 1.32
   _mouseXFactor: 250
   _mouseYFactor: 3
-  DashDistance: 50
+  DashDistance: 100
   DashCooldown: 1
+  DashDuration: 0.5
   DodgeDistance: 20
   DodgeCooldown: 1
+  DodgeDuration: 0.1
 --- !u!143 &6360997400021636217
 CharacterController:
   m_ObjectHideFlags: 0

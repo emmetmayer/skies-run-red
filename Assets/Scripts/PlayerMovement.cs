@@ -61,14 +61,17 @@ public class PlayerMovement : NetworkBehaviour
     [Header("Dash Traits")]
     public float DashDistance;
     public float DashCooldown;
+    public float DashDuration;
     private float _lastDash;
     
     [Header("Dodge Traits")]
     public float DodgeDistance;
     public float DodgeCooldown;
+    public float DodgeDuration;
     private float _lastDodge;
     private float _verticalVelocity = 0f;
-    
+
+    private float _movementTimestep = .005f;
     
     // Start is called before the first frame update
     public override void OnNetworkSpawn()
@@ -193,6 +196,7 @@ public class PlayerMovement : NetworkBehaviour
         dir *= Speed;
         
         //this should be couched into a grounded check probably
+        //add dashing/dodge check to stall reset vert vel to 0
         if (_verticalVelocity > 0 || !_ccRef.isGrounded)
         {
             _verticalVelocity -= Gravity;
@@ -321,7 +325,24 @@ public class PlayerMovement : NetworkBehaviour
                 moveDir = Vector3.zero;
                 break;
         }
-        _ccRef.Move(Time.fixedDeltaTime* moveDir * Speed * DashDistance);
+
+        StartCoroutine(DashOverTime(moveDir));
+        //_ccRef.Move(Time.fixedDeltaTime* moveDir * Speed * DashDistance);
+    }
+    
+    IEnumerator DashOverTime(Vector3 dir)
+    {
+        float movePerTick =  DashDistance / (DashDuration/ _movementTimestep);
+        movePerTick = Mathf.Min(DashDistance, movePerTick);
+       
+        for (int i = 0; i < DashDuration / _movementTimestep; i++)
+        {
+            //Debug.Log("movepertick " + movePerTick + " and in dir " + dir);
+            _ccRef.Move(Time.fixedDeltaTime * Speed * movePerTick * dir);
+            yield return new WaitForSeconds(_movementTimestep);
+        }
+
+        yield break;
     }
 
     [ServerRpc]
@@ -390,7 +411,24 @@ public class PlayerMovement : NetworkBehaviour
                 moveDir = Vector3.zero;
                 break;
         }
-        _ccRef.Move(Time.fixedDeltaTime* moveDir * Speed * DodgeDistance); 
+
+        StartCoroutine(DodgeOverTime(moveDir));
+        //_ccRef.Move(Time.fixedDeltaTime* moveDir * Speed * DodgeDistance); 
+    }
+    
+    IEnumerator DodgeOverTime(Vector3 dir)
+    {
+        float movePerTick =  DodgeDistance / (DodgeDuration/ _movementTimestep);
+        movePerTick = Mathf.Min(DodgeDistance, movePerTick);
+       
+        for (int i = 0; i < DodgeDuration / _movementTimestep; i++)
+        {
+            //Debug.Log("movepertick " + movePerTick + " and in dir " + dir);
+            _ccRef.Move(Time.fixedDeltaTime * Speed * movePerTick * dir);
+            yield return new WaitForSeconds(_movementTimestep);
+        }
+
+        yield break;
     }
 
     [ServerRpc]
@@ -445,6 +483,10 @@ public class PlayerMovement : NetworkBehaviour
     {
         
     }
+
+
+    
+    
     
 #endregion
 }

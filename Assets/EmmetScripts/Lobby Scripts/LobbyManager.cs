@@ -55,6 +55,7 @@ public class LobbyManager : MonoBehaviour
     {
         // ParrelSync should only be used within the Unity Editor so you should use the UNITY_EDITOR define
         #if UNITY_EDITOR
+        /*
         if (ParrelSync.ClonesManager.IsClone())
         {
             await UnityServices.InitializeAsync();
@@ -63,6 +64,7 @@ public class LobbyManager : MonoBehaviour
             string customArgument = ParrelSync.ClonesManager.GetArgument();
             AuthenticationService.Instance.SwitchProfile($"Clone_{customArgument}_Profile");
         }
+        */
         #endif
 
         this.playerName = playerName;
