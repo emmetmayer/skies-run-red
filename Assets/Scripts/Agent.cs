@@ -28,9 +28,12 @@ public class Agent
             GameObject.Destroy(m_Character);
         }
 
+        Vector3 spawn_position = CTF.TeamService.GetSpawnPosition(this);
+
         m_Character = GameObject.Instantiate(Resources.Load("Character", typeof(GameObject)), CTF.AgentService.m_AgentContainer) as GameObject;
         m_AgentCharacter = m_Character.GetComponent<AgentCharacter>();
         m_AgentCharacter.New(this);
+        m_Character.transform.position = spawn_position;
         m_Character.GetComponent<NetworkObject>().SpawnAsPlayerObject(m_ClientID);
     }
 
