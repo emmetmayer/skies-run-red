@@ -92,19 +92,14 @@ public class TeamService : NetworkBehaviour
     {
         return IsPlayerOnTeam(A) && A.m_TeamID == B.m_TeamID;
     }
+    
 
-
-    public void SpawnAgent(Agent agent)
+    public Vector3 GetSpawnPosition(Agent agent)
     {
         int TeamID = agent.m_TeamID;
         if (!DoesTeamExist(TeamID))
         {
-            return;
-        }
-
-        if (!agent.m_Character)
-        {
-            agent.LoadCharacter();
+            return Vector3.zero;
         }
 
         Team team = GetTeam(TeamID);
@@ -112,7 +107,8 @@ public class TeamService : NetworkBehaviour
         Assert.IsTrue(numSpawnpads > 0);
         Spawnpad randomSpawnpad = team.m_Spawnpads[Random.Range(0, numSpawnpads-1)];
         Vector3 spawn_position = randomSpawnpad.GetSpawnPosition();
-        agent.m_Character.transform.position = spawn_position;
+
+        return spawn_position;
     }
 
 

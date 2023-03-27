@@ -68,19 +68,36 @@ public class PlayerMovement : NetworkBehaviour
     public float DodgeCooldown;
     private float _lastDodge;
     private float _verticalVelocity = 0f;
-    
+
+
+
+    private void Awake()
+    {
+        _ccRef = GetComponent<CharacterController>();
+        if (_ccRef != null)
+        {
+            // CharacterController must start disabled for spawn position to work
+            _ccRef.enabled = false;
+        }
+    }
     
     // Start is called before the first frame update
     public override void OnNetworkSpawn()
     {
         if(IsOwner)
         {
+            // Owner enables character controller when spawned
+            if (_ccRef != null)
+            {
+                _ccRef.enabled = true;
+            }
             _cmRef.gameObject.SetActive(true);
             _cm3Ref = _cmRef.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
             _piRef.enabled = true;
-            _ccRef = GetComponent<CharacterController>();
             Cursor.lockState = CursorLockMode.Locked;
         }
+
+        base.OnNetworkSpawn();
     }
 
     // Update is called once per frame

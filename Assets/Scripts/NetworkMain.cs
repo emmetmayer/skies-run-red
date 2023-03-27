@@ -25,7 +25,7 @@ public static class NetworkMain
     public static void SpawnPlayerAgent(ulong clientId)
     {
         Agent agent = CTF.AgentService.AddAgent(clientId, "PLAYER_1");
-        CTF.TeamService.SpawnAgent(agent);
+        agent.LoadCharacter();
     }
 
     public static void ConnectedCallback(ulong clientId)
