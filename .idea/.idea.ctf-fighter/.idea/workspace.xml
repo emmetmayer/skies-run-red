@@ -50,6 +50,14 @@
   }
 }</component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
+    <configuration name="Standalone Player" type="RunUnityExe" factoryName="Unity Executable">
+      <option name="EXE_PATH" value="$PROJECT_DIR$/Builds/march27\ctf-fighter.exe" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="C:\Users\rufob\Documents\GitHub\ctf-fighter\Builds\march27" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <method v="2" />
+    </configuration>
     <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="C:\Program Files\UnityHubEditors\2021.3.16f1\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-projectPath C:\Users\rufob\Documents\GitHub\ctf-fighter -debugCodeOptimization" />
@@ -106,7 +114,8 @@
       <workItem from="1678655848855" duration="1641000" />
       <workItem from="1679194438066" duration="2907000" />
       <workItem from="1679351208204" duration="1541000" />
-      <workItem from="1679899023894" duration="4591000" />
+      <workItem from="1679899023894" duration="5025000" />
+      <workItem from="1680452418421" duration="2795000" />
     </task>
     <servers />
   </component>

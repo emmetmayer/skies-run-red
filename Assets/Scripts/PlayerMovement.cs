@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -12,8 +13,6 @@ using Unity.Netcode.Components;
 public enum ControlState
 {
     NONE,
-    ControlLocked, //use this when you dont want the player to move
-    DoubleJumped,
     
     //i can do like. sliding/double-jumped but im not sure
     //might need to do this for multi step abilities/basic combos
@@ -24,6 +23,11 @@ public enum PlayerState
     NONE,
     Grounded,
     Airborne,
+    ControlLocked, //use this when you dont want the player to move
+    DoubleJumped,
+    Dashed,
+    Dodged,
+    
 }
 public enum CardinalDirections
 {
@@ -35,7 +39,7 @@ public enum CardinalDirections
 public class PlayerMovement : NetworkBehaviour
 {
     private ControlState _cState;
-    public PlayerState _pState;
+    public HashSet<PlayerState> _pState = new HashSet<PlayerState>();
 
     [Header("References to relevant components")]
     [SerializeField] private CharacterController _ccRef;
@@ -105,8 +109,17 @@ public class PlayerMovement : NetworkBehaviour
     // Update is called once per frame
     void FixedUpdate()
     { 
-        _pState = _ccRef.isGrounded ? PlayerState.Grounded : PlayerState.Airborne;
-
+        //_pState = _ccRef.isGrounded ? PlayerState.Grounded : PlayerState.Airborne;
+        if (_ccRef.isGrounded)
+        {
+            _pState.Add(PlayerState.Grounded);
+            if(_pState.Contains(PlayerState.Airborne)) _pState.Remove(PlayerState.Airborne);
+        }
+        else
+        {
+            if (_pState.Contains(PlayerState.Grounded)) _pState.Remove(PlayerState.Grounded);
+            _pState.Add(PlayerState.Airborne);
+        }
         var delta = Mouse.current.delta.ReadValue();
 
         var move = _piRef.actions["Move"].ReadValue<Vector2>();
@@ -155,15 +168,7 @@ public class PlayerMovement : NetworkBehaviour
             }
             if (Pointer.current.enabled)
             {
-                //Debug.Log(Pointer.current.delta);
-                //Debug.Log(Pointer.current.delta.ReadValue());
-               
-                //Debug.Log(Pointer.current.position);
-                //Debug.Log(Pointer.current.position.ReadValue());
-                
-                //Debug.Log(Pointer.current.pressure);
-                //Debug.Log(Pointer.current.pressure.ReadValue());
-                
+
             }
             
             //Debug.Log(delta);
@@ -206,14 +211,15 @@ public class PlayerMovement : NetworkBehaviour
 
         dir += (transform.right * move.x).normalized;
         dir += (transform.forward * move.y).normalized;
-        //Debug.Log(dir);
         dir = new Vector3(dir.x, 0, dir.z);
         dir = dir.normalized;
         dir *= Speed;
         
         //this should be couched into a grounded check probably
         //add dashing/dodge check to stall reset vert vel to 0
-        if (_verticalVelocity > 0 || !_ccRef.isGrounded)
+        
+        //convert this 
+        if ((_verticalVelocity > 0 || !_ccRef.isGrounded) && (!_pState.Contains(PlayerState.Dashed) || _pState.Contains(PlayerState.Dodged)))
         {
             _verticalVelocity -= Gravity;
             //add a max 
@@ -222,11 +228,8 @@ public class PlayerMovement : NetworkBehaviour
         {
             _verticalVelocity = -_ccRef.stepOffset;
         }
-        //Debug.Log(_verticalVelocity);
         dir.y = _verticalVelocity;
-        //Debug.Log(dir);
         _ccRef.Move(Time.fixedDeltaTime * dir);
-        //_rbRef.velocity =  Speed * dir;
     }
 
     [ServerRpc]
@@ -257,13 +260,16 @@ public class PlayerMovement : NetworkBehaviour
     private void Jump()
     {
         //set y velocity
-        if (_pState == PlayerState.Grounded) _cState = ControlState.NONE;
-        if (_cState == ControlState.DoubleJumped || _cState == ControlState.ControlLocked)
+        if (_pState.Contains(PlayerState.Grounded))
+        {
+            _pState.Remove(PlayerState.DoubleJumped);
+        }
+        if (_pState.Contains(PlayerState.DoubleJumped))
         {
             return;
         }
         _verticalVelocity = JumpForce;
-        if (_pState == PlayerState.Airborne) _cState = ControlState.DoubleJumped;
+        if (_pState.Contains(PlayerState.Airborne)) _pState.Add(PlayerState.DoubleJumped);
     }
 
     [ServerRpc]
@@ -315,7 +321,9 @@ public class PlayerMovement : NetworkBehaviour
 
     private void Dash(CardinalDirections dir)
     {
-        if (Time.time - _lastDash < DashCooldown)
+        if (Time.time - _lastDash < DashCooldown || 
+            _pState.Contains(PlayerState.Dashed) || 
+            _pState.Contains(PlayerState.Dodged))
         {
             return;
         }
@@ -348,6 +356,7 @@ public class PlayerMovement : NetworkBehaviour
     
     IEnumerator DashOverTime(Vector3 dir)
     {
+        _pState.Add(PlayerState.Dashed);
         float movePerTick =  DashDistance / (DashDuration/ _movementTimestep);
         movePerTick = Mathf.Min(DashDistance, movePerTick);
        
@@ -358,6 +367,7 @@ public class PlayerMovement : NetworkBehaviour
             yield return new WaitForSeconds(_movementTimestep);
         }
 
+        _pState.Remove(PlayerState.Dashed);
         yield break;
     }
 
@@ -398,7 +408,9 @@ public class PlayerMovement : NetworkBehaviour
 
     private void Dodge(CardinalDirections dir)
     {
-        if (Time.time - _lastDodge < DodgeCooldown)
+        if (Time.time - _lastDodge < DodgeCooldown|| 
+            _pState.Contains(PlayerState.Dashed) || 
+            _pState.Contains(PlayerState.Dodged))
         {
             return;
         }
@@ -434,6 +446,7 @@ public class PlayerMovement : NetworkBehaviour
     
     IEnumerator DodgeOverTime(Vector3 dir)
     {
+        _pState.Add(PlayerState.Dodged);
         float movePerTick =  DodgeDistance / (DodgeDuration/ _movementTimestep);
         movePerTick = Mathf.Min(DodgeDistance, movePerTick);
        
@@ -444,6 +457,7 @@ public class PlayerMovement : NetworkBehaviour
             yield return new WaitForSeconds(_movementTimestep);
         }
 
+        _pState.Remove(PlayerState.Dodged);
         yield break;
     }
 
@@ -500,9 +514,5 @@ public class PlayerMovement : NetworkBehaviour
         
     }
 
-
-    
-    
-    
-#endregion
+    #endregion
 }
