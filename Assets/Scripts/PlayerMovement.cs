@@ -9,14 +9,6 @@ using Unity.Netcode;
 using Cinemachine;
 using Unity.Netcode.Components;
 
-//might be better to just do enums for super broad states/contexts, and then do bools for other allowances
-public enum ControlState
-{
-    NONE,
-    
-    //i can do like. sliding/double-jumped but im not sure
-    //might need to do this for multi step abilities/basic combos
-}
 
 public enum PlayerState
 {
@@ -38,7 +30,7 @@ public enum CardinalDirections
 }
 public class PlayerMovement : NetworkBehaviour
 {
-    private ControlState _cState;
+    //private ControlState _cState;
     public HashSet<PlayerState> _pState = new HashSet<PlayerState>();
 
     [Header("References to relevant components")]
@@ -67,12 +59,16 @@ public class PlayerMovement : NetworkBehaviour
     public float DashCooldown;
     public float DashDuration;
     private float _lastDash;
+    private float _dashScale = 2f;
     
     [Header("Dodge Traits")]
     public float DodgeDistance;
     public float DodgeCooldown;
     public float DodgeDuration;
     private float _lastDodge;
+    private float _dodgeScale = 1.5f;
+    
+    
     private float _verticalVelocity = 0f;
 
     private float _movementTimestep = .005f;
@@ -259,6 +255,7 @@ public class PlayerMovement : NetworkBehaviour
 
     private void Jump()
     {
+        _naRef.Animator.Play("Jump");
         //set y velocity
         if (_pState.Contains(PlayerState.Grounded))
         {
@@ -357,14 +354,14 @@ public class PlayerMovement : NetworkBehaviour
     IEnumerator DashOverTime(Vector3 dir)
     {
         _pState.Add(PlayerState.Dashed);
-        float movePerTick =  DashDistance / (DashDuration/ _movementTimestep);
-        movePerTick = Mathf.Min(DashDistance, movePerTick);
-       
-        for (int i = 0; i < DashDuration / _movementTimestep; i++)
+        float dashedDist = 0;
+        while (dashedDist < DashDistance)
         {
             //Debug.Log("movepertick " + movePerTick + " and in dir " + dir);
-            _ccRef.Move(Time.fixedDeltaTime * Speed * movePerTick * dir);
-            yield return new WaitForSeconds(_movementTimestep);
+            float moveThisTick = Time.deltaTime * Speed * _dashScale;
+            dashedDist += moveThisTick;
+            _ccRef.Move( moveThisTick * dir);
+            yield return new WaitForSeconds(0);
         }
 
         _pState.Remove(PlayerState.Dashed);
@@ -447,14 +444,14 @@ public class PlayerMovement : NetworkBehaviour
     IEnumerator DodgeOverTime(Vector3 dir)
     {
         _pState.Add(PlayerState.Dodged);
-        float movePerTick =  DodgeDistance / (DodgeDuration/ _movementTimestep);
-        movePerTick = Mathf.Min(DodgeDistance, movePerTick);
-       
-        for (int i = 0; i < DodgeDuration / _movementTimestep; i++)
+        float dodgedDist = 0;
+        
+        while (dodgedDist < DodgeDistance)
         {
-            //Debug.Log("movepertick " + movePerTick + " and in dir " + dir);
-            _ccRef.Move(Time.fixedDeltaTime * Speed * movePerTick * dir);
-            yield return new WaitForSeconds(_movementTimestep);
+            float moveThisFrame = Time.deltaTime * Speed ;
+            dodgedDist += moveThisFrame;
+            _ccRef.Move(moveThisFrame * dir);
+            yield return new WaitForSeconds(0);
         }
 
         _pState.Remove(PlayerState.Dodged);
@@ -483,7 +480,7 @@ public class PlayerMovement : NetworkBehaviour
     private void Fire()
     {
         //_naRef.Animator.Play(_attack);
-        _naRef.Animator.Play("SwingReal");
+        _naRef.Animator.Play("Attack");
         //_atkAnim.Play();
     }
 
