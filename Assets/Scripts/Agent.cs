@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
-public class Agent
+public class Agent : NetworkBehaviour
 {
     [SerializeField] public GameObject m_Character {get; private set;}
     [SerializeField] public AgentCharacter m_AgentCharacter {get; private set;}
@@ -13,13 +13,12 @@ public class Agent
 
     [SerializeField] public float m_RespawnTime {get; private set;} = 5.0f;
     
-    public Agent(ulong clientId, string name, int teamID)
+    public void OnCreate(ulong clientId, string name, int teamID)
     {
         m_ClientID = clientId;
         m_Name = name;
         m_TeamID = teamID;
     }
-    
 
     public void LoadCharacter()
     {
@@ -35,6 +34,7 @@ public class Agent
         m_AgentCharacter.New(this);
         m_Character.transform.position = spawn_position;
         m_Character.GetComponent<NetworkObject>().SpawnAsPlayerObject(m_ClientID);
+        m_Character.transform.parent = this.transform;
     }
 
     public IEnumerator Died()
