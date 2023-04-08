@@ -217,7 +217,7 @@ public class PlayerMovement : NetworkBehaviour
             return;
         }
         VerticalLook -= delta.y * MouseSense * _mouseYFactor * Time.deltaTime;
-        VerticalLook = Mathf.Clamp(VerticalLook, -89f, 89f);
+        VerticalLook = Mathf.Clamp(VerticalLook, -85f, 85f);
         _cbRef.transform.localRotation = Quaternion.Euler(new Vector3(VerticalLook, 0f, 0f));
     }
 
