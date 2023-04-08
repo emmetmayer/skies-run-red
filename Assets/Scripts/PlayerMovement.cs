@@ -77,11 +77,11 @@ public class PlayerMovement : NetworkBehaviour
     private float _movementTimestep = .005f;
 
     [Header("Attack Traits")] 
-    public float MaxTimeBetweenAttacks;
+    public float MaxTimeBetweenAttacks = 1.5f;
     public float[] AttackSegmentCooldown = {0, .2f,.2f,1.1f};
     public float[] AttackSegmentDuration = { .1f, .1f, 1f };
     private int _currentAttack = 0;
-    private float _lastAttack;
+    private float _lastAttack = 0f;
     
     private void Awake()
     {
@@ -115,10 +115,11 @@ public class PlayerMovement : NetworkBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
-        if (Time.time - _lastAttack > MaxTimeBetweenAttacks)
+        if (_currentAttack > 0 && Time.time - _lastAttack > 1.5f)
         {
+            Debug.Log("reset attack state");
             _currentAttack = 0;
             _naRef.Animator.SetInteger("AttackState",_currentAttack);
         }
@@ -508,8 +509,10 @@ public class PlayerMovement : NetworkBehaviour
     private void Fire()
     {
         _pState.Add(PlayerState.ControlLocked);
+        _lastAttack = Time.time;
         //_naRef.Animator.Play(_attack);
         _currentAttack++;
+        Debug.Log(_currentAttack);
         _naRef.Animator.SetInteger("AttackState", _currentAttack);
         Invoke(nameof(ClearControlLock), AttackSegmentDuration[_currentAttack-1]);
         //_atkAnim.Play();
