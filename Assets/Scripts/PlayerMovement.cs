@@ -41,7 +41,7 @@ public class PlayerMovement : NetworkBehaviour
     [SerializeField] private PlayerInput _piRef;
     [Header("Animation Refs")]
     [SerializeField] private NetworkAnimator _naRef;
-    [SerializeField] private AnimationClip _attack;
+    //[SerializeField] private AnimationClip _attack;
 
     [Header("Camera Params")]
     public float PivotHeight;
@@ -72,12 +72,17 @@ public class PlayerMovement : NetworkBehaviour
     public float DodgeDuration;
     private float _lastDodge;
     private float _dodgeScale = 1.5f;
-    
-    
     private float _verticalVelocity = 0f;
 
     private float _movementTimestep = .005f;
 
+    [Header("Attack Traits")] 
+    public float MaxTimeBetweenAttacks;
+    public float[] AttackSegmentCooldown = {0, .2f,.2f,1.1f};
+    public float[] AttackSegmentDuration = { .1f, .1f, 1f };
+    private int _currentAttack = 0;
+    private float _lastAttack;
+    
     private void Awake()
     {
         _ccRef = GetComponent<CharacterController>();
@@ -111,7 +116,12 @@ public class PlayerMovement : NetworkBehaviour
 
     // Update is called once per frame
     void FixedUpdate()
-    { 
+    {
+        if (Time.time - _lastAttack > MaxTimeBetweenAttacks)
+        {
+            _currentAttack = 0;
+            _naRef.Animator.SetInteger("AttackState",_currentAttack);
+        }
         //_pState = _ccRef.isGrounded ? PlayerState.Grounded : PlayerState.Airborne;
         if (_ccRef.isGrounded)
         {
@@ -123,10 +133,11 @@ public class PlayerMovement : NetworkBehaviour
             if (_pState.Contains(PlayerState.Grounded)) _pState.Remove(PlayerState.Grounded);
             _pState.Add(PlayerState.Airborne);
         }
+        _naRef.Animator.SetBool("isGrounded",_pState.Contains(PlayerState.Grounded));
         var delta = Mouse.current.delta.ReadValue();
 
         var move = _piRef.actions["Move"].ReadValue<Vector2>();
-
+        _naRef.Animator.SetBool("SpeedNotZero", move != Vector2.zero);
         if (/*IsServer && */IsLocalPlayer)
         {
             HandleLook(delta);
@@ -267,7 +278,7 @@ public class PlayerMovement : NetworkBehaviour
 
     private void Jump()
     {
-        _naRef.Animator.Play("Jump");
+        _naRef.Animator.SetTrigger("Jumped");
         //set y velocity
         if (_pState.Contains(PlayerState.Grounded))
         {
@@ -365,6 +376,7 @@ public class PlayerMovement : NetworkBehaviour
     
     IEnumerator DashOverTime(Vector3 dir)
     {
+        _naRef.Animator.SetTrigger("DashedOrDodged");
         _pState.Add(PlayerState.Dashed);
         float dashedDist = 0;
         while (dashedDist < DashDistance)
@@ -377,6 +389,7 @@ public class PlayerMovement : NetworkBehaviour
         }
 
         _pState.Remove(PlayerState.Dashed);
+        _naRef.Animator.SetTrigger("DashOrDodgeEnd");
         yield break;
     }
 
@@ -455,6 +468,7 @@ public class PlayerMovement : NetworkBehaviour
     
     IEnumerator DodgeOverTime(Vector3 dir)
     {
+        _naRef.Animator.SetTrigger("DashedOrDodged");
         _pState.Add(PlayerState.Dodged);
         float dodgedDist = 0;
         
@@ -467,6 +481,7 @@ public class PlayerMovement : NetworkBehaviour
         }
 
         _pState.Remove(PlayerState.Dodged);
+        _naRef.Animator.SetTrigger("DashOrDodgeEnd");
         yield break;
     }
 
@@ -478,7 +493,8 @@ public class PlayerMovement : NetworkBehaviour
 
     public void OnFire()
     {
-        if (/*IsServer && */IsLocalPlayer)
+        
+        if (/*IsServer && */IsLocalPlayer && Time.time - _lastAttack > AttackSegmentCooldown[_currentAttack])
         {
             Fire();
         }
@@ -491,11 +507,18 @@ public class PlayerMovement : NetworkBehaviour
 
     private void Fire()
     {
+        _pState.Add(PlayerState.ControlLocked);
         //_naRef.Animator.Play(_attack);
-        _naRef.Animator.Play("Attack");
+        _currentAttack++;
+        _naRef.Animator.SetInteger("AttackState", _currentAttack);
+        Invoke(nameof(ClearControlLock), AttackSegmentDuration[_currentAttack-1]);
         //_atkAnim.Play();
     }
 
+    private void ClearControlLock()
+    {
+        _pState.Remove(PlayerState.ControlLocked);
+    }
     [ServerRpc]
     private void FireServerRpc()
     {
