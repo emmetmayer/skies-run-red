@@ -137,7 +137,7 @@ public class PlayerMovement : NetworkBehaviour
         _naRef.Animator.SetBool("isGrounded",_pState.Contains(PlayerState.Grounded));
         var delta = Mouse.current.delta.ReadValue();
 
-        var move = _piRef.actions["Move"].ReadValue<Vector2>();
+        var move = _pState.Contains(PlayerState.ControlLocked) ? _piRef.actions["Move"].ReadValue<Vector2>() * .1f : _piRef.actions["Move"].ReadValue<Vector2>();
         _naRef.Animator.SetBool("SpeedNotZero", move != Vector2.zero);
         if (/*IsServer && */IsLocalPlayer)
         {
@@ -377,6 +377,7 @@ public class PlayerMovement : NetworkBehaviour
     
     IEnumerator DashOverTime(Vector3 dir)
     {
+        _naRef.Animator.SetBool("DashingOrDodging",true);
         _naRef.Animator.SetTrigger("DashedOrDodged");
         _pState.Add(PlayerState.Dashed);
         float dashedDist = 0;
@@ -391,6 +392,9 @@ public class PlayerMovement : NetworkBehaviour
 
         _pState.Remove(PlayerState.Dashed);
         _naRef.Animator.SetTrigger("DashOrDodgeEnd");
+        _naRef.Animator.SetBool("DashingOrDodging",false);
+        _pState.Add(PlayerState.ControlLocked);
+        Invoke(nameof(ClearControlLock),.5f);
         yield break;
     }
 
@@ -469,6 +473,7 @@ public class PlayerMovement : NetworkBehaviour
     
     IEnumerator DodgeOverTime(Vector3 dir)
     {
+        _naRef.Animator.SetBool("DashingOrDodging",true);
         _naRef.Animator.SetTrigger("DashedOrDodged");
         _pState.Add(PlayerState.Dodged);
         float dodgedDist = 0;
@@ -483,6 +488,8 @@ public class PlayerMovement : NetworkBehaviour
 
         _pState.Remove(PlayerState.Dodged);
         _naRef.Animator.SetTrigger("DashOrDodgeEnd");
+        _naRef.Animator.SetBool("DashingOrDodging",false);
+        
         yield break;
     }
 
