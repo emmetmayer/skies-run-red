@@ -52,16 +52,22 @@ public class AgentCharacter : NetworkBehaviour
             //process attack differently
         }
 
-        float newHealth = m_Health + amount;
-        m_Health = Mathf.Clamp(newHealth, 0, m_MaxHealth);
+        float newHealth = Mathf.Clamp(m_Health + amount, 0, m_MaxHealth);
         float healthChange = Mathf.Abs(newHealth - m_Health);
-
+        m_Health = newHealth;
+        
         if (healthChange > 0 && m_Health <= 0)
         {
             OnDied();
         }
         
         return healthChange;
+    }
+
+    [ClientRpc]
+    public void ModifyHealthClientRpc(float amount, ClientRpcParams clientRpcParams = default)
+    {
+        ModifyHealth(amount);
     }
 
     [ClientRpc]
@@ -96,6 +102,7 @@ public class AgentCharacter : NetworkBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (!IsOwner) return;
+        if (m_IsDead) return;
         
         if (other.tag == "FlagStand")
         {
@@ -128,6 +135,7 @@ public class AgentCharacter : NetworkBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if (!IsOwner) return;
+        if (m_IsDead) return;
         
         bool hit = collision.collider.CompareTag("Hitbox");
         

@@ -82,9 +82,6 @@ public class Flag : NetworkBehaviour
     {
         if (!m_CurrentHolder) return;
 
-        m_Flag.gameObject.SetActive(true);
-        m_Flag.position = m_CurrentHolder.transform.position;
-
         m_CurrentHolder.m_HeldFlag = null;
         m_CurrentHolder.SetHeldFlagClientRpc(0, new ClientRpcParams
         {
@@ -94,7 +91,20 @@ public class Flag : NetworkBehaviour
             }
         });
         
+        // If there's ground below the drop point, drop at this position
+        // If there's nothing under the drop point, respawn at the flag stand
+        Vector3 origin = m_CurrentHolder.transform.position;
         m_CurrentHolder = null;
+        RaycastHit hit;
+        if (Physics.Raycast(origin, Vector3.down, out hit, 10.0f))
+        {
+            m_Flag.gameObject.SetActive(true);
+            m_Flag.position = hit.point + new Vector3(0, 1f, 0);
+        }
+        else
+        {
+            ReturnToStand();
+        }
     }
 
     [ServerRpc(RequireOwnership = false)]

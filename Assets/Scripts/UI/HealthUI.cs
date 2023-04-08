@@ -35,7 +35,7 @@ public class HealthUI : MonoBehaviour
             if (playerObject != null)
             {
                 agentCharacter = playerObject.GetComponent<AgentCharacter>();
-                m_LastHealth = agentCharacter.MaxHealth;
+                DoUIUpdate();
             }
         }
     }
