@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b463a127f8a24a54f92b36b821b65fae
+guid: 3a2edf74b0228a948b40bd8f6981d932
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
@@ -37,7 +37,7 @@ ModelImporter:
       takeName: Take 001
       internalID: 1827226128182048838
       firstFrame: 0
-      lastFrame: 40
+      lastFrame: 20
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -64,8 +64,8 @@ ModelImporter:
     - serializedVersion: 16
       name: Falling
       takeName: Take 001
-      internalID: 9067093048684652814
-      firstFrame: 41
+      internalID: -998496362607748373
+      firstFrame: 21
       lastFrame: 90
       wrapMode: 0
       orientationOffsetY: 0
@@ -95,7 +95,7 @@ ModelImporter:
       takeName: Take 001
       internalID: 3060872287085348379
       firstFrame: 91
-      lastFrame: 110
+      lastFrame: 107
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
