@@ -32,15 +32,20 @@ public class PlayerMovement : NetworkBehaviour
 {
     //private ControlState _cState;
     public HashSet<PlayerState> _pState = new HashSet<PlayerState>();
-
+    
     [Header("References to relevant components")]
     [SerializeField] private CharacterController _ccRef;
+    [SerializeField] private GameObject _cbRef;
+    [SerializeField] private GameObject _cfRef;
     [SerializeField] private CinemachineVirtualCamera _cmRef;
-    private Cinemachine3rdPersonFollow _cm3Ref;
     [SerializeField] private PlayerInput _piRef;
     [Header("Animation Refs")]
     [SerializeField] private NetworkAnimator _naRef;
     [SerializeField] private AnimationClip _attack;
+
+    [Header("Camera Params")]
+    public float PivotHeight;
+    public float BoomLength;
 
 
     [Header("Movement Specs")]
@@ -49,10 +54,10 @@ public class PlayerMovement : NetworkBehaviour
     public float Speed = 5f;
     public float JumpForce;
     public float TurnSmoothVelocity;
-    [Range(-4f, 4f)] public float VerticalLook = 0f;
+    private float VerticalLook = 0f;
 
     [SerializeField] private float _mouseXFactor = 4f;
-    [SerializeField] private float _mouseYFactor = .04f;
+    [SerializeField] private float _mouseYFactor = 4f;
 
     [Header("Dash Traits")]
     public float DashDistance;
@@ -86,7 +91,7 @@ public class PlayerMovement : NetworkBehaviour
     // Start is called before the first frame update
     public override void OnNetworkSpawn()
     {
-        if(IsOwner)
+        if (IsOwner)
         {
             // Owner enables character controller when spawned
             if (_ccRef != null)
@@ -94,7 +99,8 @@ public class PlayerMovement : NetworkBehaviour
                 _ccRef.enabled = true;
             }
             _cmRef.gameObject.SetActive(true);
-            _cm3Ref = _cmRef.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
+            _cbRef.transform.localPosition = new Vector3(0f, PivotHeight, 0f);
+            _cfRef.transform.localPosition = new Vector3(0f, 0f, -BoomLength);
             _piRef.enabled = true;
             Cursor.lockState = CursorLockMode.Locked;
         }
@@ -193,8 +199,8 @@ public class PlayerMovement : NetworkBehaviour
             return;
         }
         VerticalLook -= delta.y * MouseSense * _mouseYFactor * Time.fixedDeltaTime;
-        VerticalLook = Mathf.Clamp(VerticalLook, -4f, 4f);
-        _cm3Ref.VerticalArmLength = VerticalLook;
+        VerticalLook = Mathf.Clamp(VerticalLook, -89f, 89f);
+        _cbRef.transform.localRotation = Quaternion.Euler(new Vector3(VerticalLook, 0f, 0f));
     }
 
 
