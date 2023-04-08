@@ -14,7 +14,7 @@ public class EditPlayerName : MonoBehaviour {
     public event EventHandler OnNameChanged;
 
 
-    [SerializeField] private TextMeshProUGUI playerNameText;
+    [SerializeField] private TMP_Text playerNameText;
 
 
     private string playerName = "Player";

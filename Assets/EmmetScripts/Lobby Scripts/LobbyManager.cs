@@ -53,6 +53,7 @@ public class LobbyManager : MonoBehaviour
 
     public async void Authenticate(string playerName)
     {
+        
         // ParrelSync should only be used within the Unity Editor so you should use the UNITY_EDITOR define
         #if UNITY_EDITOR
         /*
