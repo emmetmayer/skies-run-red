@@ -86,6 +86,7 @@ public class PlayerMovement : NetworkBehaviour
             // CharacterController must start disabled for spawn position to work
             _ccRef.enabled = false;
         }
+        
     }
     
     // Start is called before the first frame update
@@ -150,7 +151,12 @@ public class PlayerMovement : NetworkBehaviour
         //_dir = transform.forward;
         //transform.position = new Vector3(0, 0, 0);
     }
-    
+
+    public void CheckForUpdatedSense()
+    {
+        MouseSense = PlayerPrefs.GetFloat("MouseSensitivity",1);
+        Debug.Log(MouseSense);
+    }
     
 #region Input
 
