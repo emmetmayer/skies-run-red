@@ -122,13 +122,13 @@ MonoBehaviour:
   _naRef: {fileID: 3408532492223773545}
   PivotHeight: 1.6
   BoomLength: 3.5
-  Gravity: 0.5
+  Gravity: 5
   MouseSense: 1
-  Speed: 7
+  Speed: 5
   JumpForce: 13
   TurnSmoothVelocity: 0
-  _mouseXFactor: 250
-  _mouseYFactor: 200
+  _mouseXFactor: 25
+  _mouseYFactor: 25
   DashDistance: 7
   DashCooldown: 1
   DashDuration: 0.5

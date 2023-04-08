@@ -203,7 +203,7 @@ public class PlayerMovement : NetworkBehaviour
             int dir = delta.x > 0 ? 1 : -1;
 
            
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, transform.eulerAngles.y + (dir * MouseSense * _mouseXFactor * Time.fixedDeltaTime), ref TurnSmoothVelocity, 0f);
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, transform.eulerAngles.y + (delta.x * MouseSense * _mouseXFactor * Time.deltaTime), ref TurnSmoothVelocity, 0f);
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
         }
@@ -216,7 +216,7 @@ public class PlayerMovement : NetworkBehaviour
         {
             return;
         }
-        VerticalLook -= delta.y * MouseSense * _mouseYFactor * Time.fixedDeltaTime;
+        VerticalLook -= delta.y * MouseSense * _mouseYFactor * Time.deltaTime;
         VerticalLook = Mathf.Clamp(VerticalLook, -89f, 89f);
         _cbRef.transform.localRotation = Quaternion.Euler(new Vector3(VerticalLook, 0f, 0f));
     }
@@ -241,7 +241,7 @@ public class PlayerMovement : NetworkBehaviour
         //convert this 
         if ((_verticalVelocity > 0 || !_ccRef.isGrounded) && (!_pState.Contains(PlayerState.Dashed) || _pState.Contains(PlayerState.Dodged)))
         {
-            _verticalVelocity -= Gravity;
+            _verticalVelocity -= Gravity * Time.deltaTime;
             //add a max 
         }
         else
@@ -249,7 +249,7 @@ public class PlayerMovement : NetworkBehaviour
             _verticalVelocity = -_ccRef.stepOffset;
         }
         dir.y = _verticalVelocity;
-        _ccRef.Move(Time.fixedDeltaTime * dir);
+        _ccRef.Move(Time.deltaTime * dir);
     }
 
     [ServerRpc]
