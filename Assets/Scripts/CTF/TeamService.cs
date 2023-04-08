@@ -33,8 +33,7 @@ public class TeamService : NetworkBehaviour
 {
     private List<Team> m_Teams;
     
-    [ServerRpc(RequireOwnership = false)]
-    public void AddScoreServerRpc(int teamID, float addScore)
+    public void AddScore(int teamID, float addScore)
     {
         this.GetTeam(teamID).AddScore(addScore);
     }

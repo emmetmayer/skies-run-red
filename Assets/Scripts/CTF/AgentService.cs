@@ -6,7 +6,6 @@ using Unity.Netcode;
 public class AgentService : NetworkBehaviour
 {
     [SerializeField] private List<Agent> m_Agents;
-    public Transform m_AgentContainer {get; private set;}
 
     public Agent AddAgent(ulong _clientId, string _name, int _teamID = -1)
     {
@@ -22,6 +21,5 @@ public class AgentService : NetworkBehaviour
     public void OnAwake()
     {
         m_Agents = new List<Agent>();
-        m_AgentContainer = (new GameObject("AgentContainer")).transform;
     }
 }

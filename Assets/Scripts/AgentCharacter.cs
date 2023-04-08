@@ -8,11 +8,13 @@ public class AgentCharacter : NetworkBehaviour
 {
     // Abstract agent reference
     [SerializeField] public Agent m_Agent {get; private set;}
+    private ulong m_NetworkObjectId;
 
     // Character metadata
     [SerializeField] private float m_MaxHealth = 100.0f;
     [SerializeField] private float m_Health = 100.0f;
     [SerializeField] public Flag m_HeldFlag;
+    [SerializeField] public GameObject m_FlagObject;
     private bool m_IsDead = false;
 
     public float MaxHealth { get { return m_MaxHealth; } private set { m_MaxHealth = value; } }
@@ -34,7 +36,7 @@ public class AgentCharacter : NetworkBehaviour
 
         if (m_HeldFlag)
         {
-            m_HeldFlag.Drop();
+            m_HeldFlag.DropServerRpc(m_NetworkObjectId);
         }
         
         // TODO: ragdoll or other death effect
@@ -62,6 +64,21 @@ public class AgentCharacter : NetworkBehaviour
         return healthChange;
     }
 
+    [ClientRpc]
+    public void SetHeldFlagClientRpc(ulong flagNetworkId, ClientRpcParams clientRpcParams = default)
+    {
+        Flag newHeldFlag = null;
+        if (flagNetworkId != 0)
+        {
+            NetworkObject flagObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[flagNetworkId];
+            newHeldFlag = flagObject.GetComponent<Flag>();
+        }
+
+        bool isHeld = (newHeldFlag != null);
+        m_FlagObject.SetActive(isHeld);
+        m_HeldFlag = newHeldFlag;
+    }
+
 
     // Constructor
     public void New(Agent agent)
@@ -70,37 +87,36 @@ public class AgentCharacter : NetworkBehaviour
         m_Health = m_MaxHealth;
     }
 
+    public override void OnNetworkSpawn()
+    {
+        if (!IsOwner) return;
+        m_NetworkObjectId = this.GetComponent<NetworkObject>().NetworkObjectId;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (!IsOwner) return;
         
         if (other.tag == "FlagStand")
         {
-            FlagStand flagStand = other.GetComponent<FlagStand>();
-            if (!flagStand) return;
-
-            if (flagStand.m_TeamID == m_Agent.m_TeamID)
+            Flag flag = other.GetComponent<Flag>();
+            if (flag.m_TeamID == m_Agent.m_TeamID)
             {
                 if (m_HeldFlag)
                 {
-                    m_HeldFlag.ScorePoints(m_Agent.m_TeamID);
+                    m_HeldFlag.ScorePointsServerRpc(m_Agent.m_TeamID);
                 }
             }
             else
             {
-                Transform flagObject = other.transform.Find("Flag");
-                if (flagObject)
-                {
-                    ulong networkObjectId = this.GetComponent<NetworkObject>().NetworkObjectId;
-                    flagObject.GetComponent<Flag>().GrabServerRpc(networkObjectId);
-                }
+                flag.GrabServerRpc(m_NetworkObjectId);
             }
         }
 
-        if (other.tag == "Flag")
+        if (other.tag == "Flag" && !m_HeldFlag)
         {
-            ulong networkObjectId = this.GetComponent<NetworkObject>().NetworkObjectId;
-            other.GetComponent<Flag>().GrabServerRpc(networkObjectId);
+            Flag flag = other.transform.parent.GetComponent<Flag>();
+            flag.GrabServerRpc(m_NetworkObjectId);
         }
 
         if (other.CompareTag("Hitbox"))
