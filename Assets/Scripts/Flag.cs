@@ -7,13 +7,11 @@ public class Flag : NetworkBehaviour
 {
     // Holder metadata
     [SerializeField] private AgentCharacter m_CurrentHolder;
-    [SerializeField] private Transform m_HoldingObject;
-    [SerializeField] private Vector3 m_FlagOffset;
-
-    private Transform m_Stand;
-    private Vector3 m_StandOffset;
-    private Quaternion m_OriginalRot;
+    [SerializeField] private Transform m_Flag;
+    private Vector3 m_StandPosition;
+    private Quaternion m_StandRotation;
     private bool m_IsOnStand;
+    private ulong m_NetworkObjectId;
 
     // CTF data
     [SerializeField] public int m_TeamID;
@@ -25,22 +23,21 @@ public class Flag : NetworkBehaviour
     {
         if (m_CurrentHolder)
         {
-            m_CurrentHolder.m_HeldFlag = null;
-            m_CurrentHolder = null;
+            Drop();
         }
-
-        //this.transform.SetParent(m_Stand);
-        m_HoldingObject = m_Stand;
-        this.transform.position = m_StandOffset;
-        this.transform.rotation = m_OriginalRot;
+        
+        m_Flag.gameObject.SetActive(true);
+        m_Flag.position = m_StandPosition;
+        m_Flag.rotation = m_StandRotation;
 
         m_IsOnStand = true;
         m_StoredPoints = 1;
     }
 
-    public void ScorePoints(int byTeamID)
+    [ServerRpc]
+    public void ScorePointsServerRpc(int byTeamID)
     {
-        CTF.TeamService.AddScoreServerRpc(byTeamID, m_StoredPoints);
+        CTF.TeamService.AddScore(byTeamID, m_StoredPoints);
         ReturnToStand();
     }
 
@@ -53,15 +50,18 @@ public class Flag : NetworkBehaviour
         if (agentChar.m_Agent.m_TeamID != m_TeamID)
         {
             m_CurrentHolder = agentChar;
-            agentChar.m_HeldFlag = this;
             m_CurrentHoldTime = 0;
             
-            this.transform.position = agentChar.transform.position + m_FlagOffset;
-            Vector3 ea = agentChar.transform.rotation.eulerAngles;
-            this.transform.rotation = Quaternion.Euler(ea.x, ea.y + 90, ea.z + 90);
-            m_HoldingObject = agentChar.transform;
-            //this.transform.SetParent(agentChar.transform);
+            agentChar.m_HeldFlag = this;
+            agentChar.SetHeldFlagClientRpc(m_NetworkObjectId, new ClientRpcParams
+            {
+                Send = new ClientRpcSendParams
+                {
+                    TargetClientIds = new ulong[] { agentChar.m_Agent.m_ClientID }
+                }
+            });
 
+            m_Flag.gameObject.SetActive(false);
             m_IsOnStand = false;
         }
         else if (!m_IsOnStand)
@@ -78,32 +78,42 @@ public class Flag : NetworkBehaviour
         Grab(agentChar);
     }
 
-    public void Throw()
-    {
-        if (!m_CurrentHolder) return;
-        m_CurrentHolder.m_HeldFlag = null;
-        m_CurrentHolder = null;
-
-        // TODO
-    }
-
     public void Drop()
     {
         if (!m_CurrentHolder) return;
-        m_CurrentHolder.m_HeldFlag = null;
-        m_CurrentHolder = null;
 
-        //this.transform.parent = null;
-        //m_HoldingObject = null;
-        this.transform.position -= m_FlagOffset;
+        m_Flag.gameObject.SetActive(true);
+        m_Flag.position = m_CurrentHolder.transform.position;
+
+        m_CurrentHolder.m_HeldFlag = null;
+        m_CurrentHolder.SetHeldFlagClientRpc(0, new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new ulong[] { m_CurrentHolder.m_Agent.m_ClientID }
+            }
+        });
+        
+        m_CurrentHolder = null;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void DropServerRpc(ulong networkObjectId)
+    {
+        NetworkObject agentCharObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[networkObjectId];
+        AgentCharacter agentChar = agentCharObject.GetComponent<AgentCharacter>();
+        if (agentChar != m_CurrentHolder) return;
+        Drop();
     }
     
 
-    void Awake()
+    public override void OnNetworkSpawn()
     {
         if (!IsServer) return;
 
-        m_Stand = this.transform.parent;
+        m_StandPosition = m_Flag.position;
+        m_StandRotation = m_Flag.rotation;
+        m_NetworkObjectId = this.GetComponent<NetworkObject>().NetworkObjectId;
 
         ReturnToStand();
     }
@@ -115,11 +125,6 @@ public class Flag : NetworkBehaviour
         if (m_CurrentHolder)
         {
             m_CurrentHoldTime += Time.deltaTime;
-        }
-
-        if (m_HoldingObject != null)
-        {
-            this.transform.position = m_HoldingObject.position;
         }
     }
 }
