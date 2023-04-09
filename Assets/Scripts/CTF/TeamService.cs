@@ -84,21 +84,21 @@ public class TeamService : NetworkBehaviour
 
     bool IsPlayerOnTeam(Agent A)
     {
-        return A.m_TeamID != -1;
+        return A.m_TeamID.Value != -1;
     }
 
     bool ArePlayersOnSameTeam(Agent A, Agent B)
     {
-        return IsPlayerOnTeam(A) && A.m_TeamID == B.m_TeamID;
+        return IsPlayerOnTeam(A) && A.m_TeamID.Value == B.m_TeamID.Value;
     }
     
 
-    public Vector3 GetSpawnPosition(Agent agent)
+    public (Vector3 position, Quaternion rotation) GetSpawnPosition(Agent agent)
     {
-        int TeamID = agent.m_TeamID;
+        int TeamID = agent.m_TeamID.Value;
         if (!DoesTeamExist(TeamID))
         {
-            return Vector3.zero;
+            return (Vector3.zero, Quaternion.identity);
         }
 
         Team team = GetTeam(TeamID);
@@ -107,7 +107,7 @@ public class TeamService : NetworkBehaviour
         Spawnpad randomSpawnpad = team.m_Spawnpads[Random.Range(0, numSpawnpads-1)];
         Vector3 spawn_position = randomSpawnpad.GetSpawnPosition();
 
-        return spawn_position;
+        return (spawn_position, randomSpawnpad.transform.rotation);
     }
 
 

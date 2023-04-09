@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using Unity.Collections;
 
-public static class NetworkMain
+public class NetworkMain : NetworkBehaviour
 {
-    public static void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
+    public static NetworkMain Instance;
+
+    public void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
     {
         // The client identifier to be authenticated
         var clientId = request.ClientNetworkId;
@@ -22,29 +25,58 @@ public static class NetworkMain
         response.Pending = false;
     }
 
-    public static void SpawnPlayerAgent(ulong clientId)
+
+    [ServerRpc(RequireOwnership = false)]
+    public void SpawnPlayerAgentServerRpc(FixedString64Bytes playerNameFixed, int playerTeam, ServerRpcParams serverRpcParams = default)
     {
-        Agent agent = CTF.AgentService.AddAgent(clientId, "PLAYER_1");
+        var clientId = serverRpcParams.Receive.SenderClientId;
+        string playerName = playerNameFixed.ToString();
+        Agent agent = CTF.AgentService.AddAgent(clientId, playerName.ToString(), playerTeam);
         agent.LoadCharacter();
     }
 
-    public static void ConnectedCallback(ulong clientId)
+    [ClientRpc]
+    public void AskPlayerToPrepareSpawnRequestClientRpc(ClientRpcParams clientRpcParams = default)
+    {
+        FixedString64Bytes playerNameFixed = LobbyManager.Instance.playerName;
+        int playerTeam = int.Parse(LobbyManager.Instance.playerTeam);
+        SpawnPlayerAgentServerRpc(playerNameFixed, playerTeam);
+    }
+
+    public void AskPlayerToPrepareSpawnRequest(ulong clientId)
+    {
+        AskPlayerToPrepareSpawnRequestClientRpc(new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new ulong[] { clientId }
+            }
+        });
+    }
+
+
+    public void ConnectedCallback(ulong clientId)
     {
         if (NetworkManager.Singleton.IsServer)
         {
             if (CTF.Instance.IsRunning.Value)
             {
-                SpawnPlayerAgent(clientId);
+                AskPlayerToPrepareSpawnRequest(clientId);
             }
             else
             {
                 CTF.Instance.IsRunning.OnValueChanged += (bool previous, bool current) => {
                     if (!previous && current)
                     {
-                        SpawnPlayerAgent(clientId);
+                        AskPlayerToPrepareSpawnRequest(clientId);
                     }
                 };
             }
         }
+    }
+
+    void Awake()
+    {
+        Instance = this;
     }
 }

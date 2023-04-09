@@ -12,11 +12,11 @@ public class NameTagScript : MonoBehaviour
     [SerializeField] private AgentCharacter _char;
     [SerializeField] private Canvas _canvasRef;
     // Start is called before the first frame update
-    void Start()
+    public void OnNametagReady()
     {
-        _storedName = _char.m_Agent.m_Name;
+        _storedName = _char.m_Agent.GetName();
         _tag.text = _storedName;
-        _teamColor.color = _char.m_Agent.m_TeamID == 0 ? Color.blue : Color.red;
+        _teamColor.color = _char.m_Agent.m_TeamID.Value == 0 ? Color.blue : Color.red;
     }
 
     // Update is called once per frame

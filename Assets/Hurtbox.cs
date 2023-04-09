@@ -10,37 +10,22 @@ public class Hurtbox : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!IsServer) return;
-
+        if (!IsClient) return;
         if (other.tag == "Player")
         {
             AgentCharacter agentChar = other.GetComponent<AgentCharacter>();
-            agentChar.ModifyHealthClientRpc(-damageOnTrigger, new ClientRpcParams
-            {
-                Send = new ClientRpcSendParams
-                {
-                    TargetClientIds = new ulong[] { agentChar.m_Agent.m_ClientID }
-                }
-            });
+            agentChar.ModifyHealth(-damageOnTrigger);
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!IsServer) return;
-        
+        if (!IsClient) return;
         Collider other = collision.collider;
-
         if (other.tag == "Player")
         {
             AgentCharacter agentChar = other.GetComponent<AgentCharacter>();
-            agentChar.ModifyHealthClientRpc(-damageOnCollide, new ClientRpcParams
-            {
-                Send = new ClientRpcSendParams
-                {
-                    TargetClientIds = new ulong[] { agentChar.m_Agent.m_ClientID }
-                }
-            });
+            agentChar.ModifyHealth(-damageOnCollide);
         }
     }
 }

@@ -110,6 +110,10 @@ public class PlayerMovement : NetworkBehaviour
             _piRef.enabled = true;
             Cursor.lockState = CursorLockMode.Locked;
         }
+        else
+        {
+            _cmRef.gameObject.SetActive(false);
+        }
 
         base.OnNetworkSpawn();
     }

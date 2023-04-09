@@ -10,15 +10,10 @@ public class AgentService : NetworkBehaviour
 
     public Agent AddAgent(ulong _clientId, string _name, int _teamID = -1)
     {
-        string name = _name;
-        if (_teamID == -1) _teamID = (m_Agents.Count % 2);
-        int teamID = _teamID;
-
         Agent newAgent = Instantiate(AgentPrefab).GetComponent<Agent>();
         newAgent.GetComponent<NetworkObject>().Spawn();
-
-        newAgent.gameObject.name = "AGENT_"+name;
-        newAgent.OnCreate(_clientId, name, teamID);
+        newAgent.OnCreate(_clientId, _name, _teamID);
+        
         newAgent.transform.parent = CTF.Instance.transform;
 
         m_Agents.Add(newAgent);

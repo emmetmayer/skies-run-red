@@ -41,8 +41,8 @@ public class RelayManager : MonoBehaviour
 
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
 
-            NetworkManager.Singleton.ConnectionApprovalCallback += NetworkMain.ApprovalCheck;
-            NetworkManager.Singleton.OnClientConnectedCallback += NetworkMain.ConnectedCallback;
+            NetworkManager.Singleton.ConnectionApprovalCallback += NetworkMain.Instance.ApprovalCheck;
+            NetworkManager.Singleton.OnClientConnectedCallback += NetworkMain.Instance.ConnectedCallback;
             
             NetworkManager.Singleton.StartHost();
 

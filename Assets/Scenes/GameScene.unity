@@ -346,6 +346,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: WallHurtbox
       objectReference: {fileID: 0}
+    - target: {fileID: 6758277263224072372, guid: ee6c9fc96de4d8a458ba821907f32fea,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 6758277263224072373, guid: ee6c9fc96de4d8a458ba821907f32fea,
         type: 3}
       propertyPath: GlobalObjectIdHash
@@ -3656,12 +3661,30 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1058902918}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &431108682 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1937929041758091121, guid: 310e93bba01c4e1458b9c9ebf9b5211b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1758501273}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &431108689 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1937929041758091133, guid: 310e93bba01c4e1458b9c9ebf9b5211b,
     type: 3}
   m_PrefabInstance: {fileID: 1758501273}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &431108690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 431108682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57b784a52cf2e6e4e95d37e3a60ae88d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &431258881
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6838,6 +6861,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SkyHurtbox
+      objectReference: {fileID: 0}
+    - target: {fileID: 6758277263224072372, guid: ee6c9fc96de4d8a458ba821907f32fea,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 6758277263224072373, guid: ee6c9fc96de4d8a458ba821907f32fea,
         type: 3}
@@ -11754,7 +11782,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1946098964}
+      objectReference: {fileID: 0}
     - target: {fileID: 8266299949507666612, guid: 623b561eaad3ee7408120d21c7d1ecda,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -11763,7 +11791,7 @@ PrefabInstance:
     - target: {fileID: 8266299949507666612, guid: 623b561eaad3ee7408120d21c7d1ecda,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: DisableWhenGameStarts
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8266299949507666612, guid: 623b561eaad3ee7408120d21c7d1ecda,
         type: 3}
@@ -30871,6 +30899,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: WallHurtbox (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 6758277263224072372, guid: ee6c9fc96de4d8a458ba821907f32fea,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 6758277263224072373, guid: ee6c9fc96de4d8a458ba821907f32fea,
         type: 3}
       propertyPath: GlobalObjectIdHash
@@ -30970,6 +31003,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: WallHurtbox (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6758277263224072372, guid: ee6c9fc96de4d8a458ba821907f32fea,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 6758277263224072373, guid: ee6c9fc96de4d8a458ba821907f32fea,
         type: 3}
@@ -33325,6 +33363,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: WallHurtbox (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6758277263224072372, guid: ee6c9fc96de4d8a458ba821907f32fea,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 6758277263224072373, guid: ee6c9fc96de4d8a458ba821907f32fea,
         type: 3}
       propertyPath: GlobalObjectIdHash
@@ -34201,18 +34244,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 352883722}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1946098964 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 330120060465154399, guid: 507282c0d245a994da64f3e25089659f,
-    type: 3}
-  m_PrefabInstance: {fileID: 757517648}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2bf11aac4a1fd54dbc14edb1194ef41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1948442270
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -36520,6 +36551,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: VoidHurtbox
+      objectReference: {fileID: 0}
+    - target: {fileID: 6758277263224072372, guid: ee6c9fc96de4d8a458ba821907f32fea,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 6758277263224072373, guid: ee6c9fc96de4d8a458ba821907f32fea,
         type: 3}

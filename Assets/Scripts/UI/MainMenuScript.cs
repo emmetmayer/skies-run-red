@@ -12,6 +12,11 @@ public class MainMenuScript : MonoBehaviour
     [SerializeField] private TMP_Text _name;
     [SerializeField] private TMP_Text _textBox;
 
+    public void Start()
+    {
+        LobbyManager.Instance.OnGameStarted += DisableWhenGameStarts;
+    }
+
     //ServerList and ChangeName currently use localised scripts on their respective buttons, written from some netcode tutorials
     public void Credits()
     {
@@ -22,8 +27,8 @@ public class MainMenuScript : MonoBehaviour
     {
         Application.Quit();
     }
-
-    public void DisableWhenGameStarts()
+    
+    public void DisableWhenGameStarts(object sender, System.EventArgs e)
     {
         gameObject.SetActive(false);
     }

@@ -35,8 +35,8 @@ public class LobbyManager : MonoBehaviour
     private float lobbyPollTimer;
     private float refreshLobbyListTimer = 5f;
     private Lobby joinedLobby;
-    private string playerName;
-    private string playerTeam;
+    public string playerName;
+    public string playerTeam;
 
 
     private void Awake()

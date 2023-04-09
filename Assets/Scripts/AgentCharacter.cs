@@ -7,15 +7,21 @@ using Unity.Netcode;
 public class AgentCharacter : NetworkBehaviour
 {
     // Abstract agent reference
-    [SerializeField] public Agent m_Agent {get; private set;}
+    [SerializeField] public Agent m_Agent;
     private ulong m_NetworkObjectId;
 
     // Character metadata
+    [SerializeField] public NameTagScript m_Nametag;
     [SerializeField] private float m_MaxHealth = 100.0f;
     [SerializeField] private float m_Health = 100.0f;
     [SerializeField] public Flag m_HeldFlag;
     [SerializeField] public GameObject m_FlagObject;
     private bool m_IsDead = false;
+
+    public NetworkVariable<bool> m_IsHoldingFlag = new NetworkVariable<bool>(false,
+        NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    public NetworkVariable<bool> m_IsServerReady = new NetworkVariable<bool>(false,
+        NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     public float MaxHealth { get { return m_MaxHealth; } private set { m_MaxHealth = value; } }
     public float Health { get { return m_Health; } private set { m_Health = value; } }
@@ -40,7 +46,7 @@ public class AgentCharacter : NetworkBehaviour
         }
         
         // TODO: ragdoll or other death effect
-        StartCoroutine(m_Agent.Died());
+        m_Agent.DiedServerRpc();
     }
 
     //QUESTION: should we just localize all of take damage here? 
@@ -80,23 +86,39 @@ public class AgentCharacter : NetworkBehaviour
             newHeldFlag = flagObject.GetComponent<Flag>();
         }
 
-        bool isHeld = (newHeldFlag != null);
-        m_FlagObject.SetActive(isHeld);
         m_HeldFlag = newHeldFlag;
+        m_IsHoldingFlag.Value = (newHeldFlag != null);
     }
+    
 
 
-    // Constructor
-    public void New(Agent agent)
+    public void ServerReadyPrepareCharacter()
     {
-        m_Agent = agent;
-        m_Health = m_MaxHealth;
+        m_Agent = this.transform.parent.GetComponent<Agent>();
+        this.gameObject.name = "CHAR_"+m_Agent.GetName();
+        m_Nametag.OnNametagReady();
     }
 
     public override void OnNetworkSpawn()
     {
-        if (!IsOwner) return;
-        m_NetworkObjectId = this.GetComponent<NetworkObject>().NetworkObjectId;
+        if (IsOwner)
+        {
+            m_NetworkObjectId = this.GetComponent<NetworkObject>().NetworkObjectId;
+            m_Health = m_MaxHealth;
+        }
+        
+        m_FlagObject.SetActive(m_IsHoldingFlag.Value);
+        m_IsHoldingFlag.OnValueChanged += (bool previous, bool current) => {
+            m_FlagObject.SetActive(current);
+        };
+        
+        if (m_IsServerReady.Value)
+        {
+            ServerReadyPrepareCharacter();
+        }
+        m_IsServerReady.OnValueChanged += (bool previous, bool current) => {
+            ServerReadyPrepareCharacter();
+        };
     }
 
     private void OnTriggerEnter(Collider other)
@@ -107,14 +129,14 @@ public class AgentCharacter : NetworkBehaviour
         if (other.tag == "FlagStand")
         {
             Flag flag = other.GetComponent<Flag>();
-            if (flag.m_TeamID == m_Agent.m_TeamID)
+            if (flag.m_TeamID == m_Agent.m_TeamID.Value)
             {
                 if (m_HeldFlag)
                 {
-                    m_HeldFlag.ScorePointsServerRpc(m_Agent.m_TeamID);
+                    m_HeldFlag.ScorePointsServerRpc(m_Agent.m_TeamID.Value);
                 }
             }
-            else
+            else if (flag.m_IsOnStand.Value)
             {
                 flag.GrabServerRpc(m_NetworkObjectId);
             }
