@@ -172,16 +172,12 @@ public class PlayerMovement : NetworkBehaviour
     public void CheckForUpdatedSense()
     {
         MouseSense = PlayerPrefs.GetFloat("MouseSensitivity",1);
-        Debug.Log(MouseSense);
+        //Debug.Log(MouseSense);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Hitbox") && other.gameObject.GetComponent<AgentCharacter>().m_Agent.m_TeamID !=
-            GetComponent<AgentCharacter>().m_Agent.m_TeamID)
-        {
-            GetComponent<AgentCharacter>().ModifyHealth(-1);
-        }
+        
     }
 
     #region Input
@@ -459,7 +455,7 @@ public class PlayerMovement : NetworkBehaviour
         _lastDodge = Time.time;
         
         //add cd check
-        Debug.Log("Dodging");
+        //Debug.Log("Dodging");
         //lock input? do short, fast movement
         Vector3 moveDir;
         switch (dir)
@@ -533,7 +529,7 @@ public class PlayerMovement : NetworkBehaviour
         _lastAttack = Time.time;
         //_naRef.Animator.Play(_attack);
         _currentAttack++;
-        Debug.Log(_currentAttack);
+        //Debug.Log(_currentAttack);
         _naRef.Animator.SetInteger("AttackState", _currentAttack);
         Invoke(nameof(ClearControlLock), AttackSegmentDuration[_currentAttack-1]);
         //_atkAnim.Play();

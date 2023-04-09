@@ -8,6 +8,7 @@ TagManager:
   - FlagStand
   - Hurtbox
   - Hitbox
+  - Sword
   layers:
   - Default
   - TransparentFX

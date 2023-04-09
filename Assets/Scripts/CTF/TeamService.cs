@@ -86,8 +86,8 @@ public class TeamService : NetworkBehaviour
     {
         return A.m_TeamID.Value != -1;
     }
-
-    bool ArePlayersOnSameTeam(Agent A, Agent B)
+    
+    public bool ArePlayersOnSameTeam(Agent A, Agent B)
     {
         return IsPlayerOnTeam(A) && A.m_TeamID.Value == B.m_TeamID.Value;
     }

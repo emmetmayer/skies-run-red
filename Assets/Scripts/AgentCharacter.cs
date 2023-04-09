@@ -32,6 +32,8 @@ public class AgentCharacter : NetworkBehaviour
     [Tooltip("When this collides with the enemy's hurtbox I take damage")]
     private List<Collider> _hitBox;
     private bool isDefending = false;
+
+    [SerializeField] private ParticleSystem _woundEffect;
     
     public void OnDied()
     {
@@ -148,9 +150,13 @@ public class AgentCharacter : NetworkBehaviour
             flag.GrabServerRpc(m_NetworkObjectId);
         }
 
-        if (other.CompareTag("Hitbox"))
+        if (other.CompareTag("Hitbox") || 
+            (other.CompareTag("Sword") && m_Agent.m_TeamID != other.GetComponent<SwordScript>().Agent.m_Agent.m_TeamID) )
         {
-            ModifyHealth(-10);
+            //Debug.Log(m_Agent.m_TeamID + " | " + other.GetComponent<SwordScript>().Agent.m_Agent.m_TeamID);
+            ModifyHealth(-1);
+            _woundEffect.Play();
+            
         }
     }
 
