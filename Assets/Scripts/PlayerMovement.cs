@@ -177,10 +177,10 @@ public class PlayerMovement : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Sword") && other.gameObject.GetComponent<AgentCharacter>().m_Agent.m_TeamID !=
+        if (other.CompareTag("Hitbox") && other.gameObject.GetComponent<AgentCharacter>().m_Agent.m_TeamID !=
             GetComponent<AgentCharacter>().m_Agent.m_TeamID)
         {
-            GetComponent<AgentCharacter>().ModifyHealth(-10);
+            GetComponent<AgentCharacter>().ModifyHealth(-1);
         }
     }
 
