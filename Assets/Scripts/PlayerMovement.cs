@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -173,8 +174,17 @@ public class PlayerMovement : NetworkBehaviour
         MouseSense = PlayerPrefs.GetFloat("MouseSensitivity",1);
         Debug.Log(MouseSense);
     }
-    
-#region Input
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Sword") && other.gameObject.GetComponent<AgentCharacter>().m_Agent.m_TeamID !=
+            GetComponent<AgentCharacter>().m_Agent.m_TeamID)
+        {
+            GetComponent<AgentCharacter>().ModifyHealth(-10);
+        }
+    }
+
+    #region Input
 
     private void HandleLook(Vector2 delta)
     {
